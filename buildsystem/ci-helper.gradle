@@ -1,0 +1,18 @@
+task prepareDevice(description: "Runs before the connected tests in order to prepare the device") {
+    group = "ci-helper"
+    doLast {
+        runShellCommandParam("adb devices", false)
+        sleep(500)
+        // Wakes up the device. Behaves somewhat like KEYCODE_POWER
+        // but it has no effect if the device is already awake.
+        runShellCommandParam("adb shell input keyevent 224", false)
+        runShellCommandParam("adb shell am instrument -e disableAnalytics true", false)
+        sleep(200)
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'connectedDebugAndroidTest') {
+        task.dependsOn prepareDevice
+    }
+}

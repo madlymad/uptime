@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="key_version">key_version</string>
+    <string name="key_developer">key_developer</string>
+    <string name="key_developer_screen">key_developer_screen</string>
+    <string name="key_license">key_license</string>
+    <string name="key_credits">key_credits</string>
+    <string name="key_privacy">key_privacy</string>
+    <string name="key_terms">key_terms</string>
+    <string name="key_logs_enable">key_logs_enable</string>
+    <string name="key_logs_delete">key_logs_delete</string>
+    <string name="key_logs_email">key_logs_email</string>
+    <string name="key_logs_show">key_logs_show</string>
+    <string name="key_crashlytics_on">key_crashlytics_on</string>
+</resources>

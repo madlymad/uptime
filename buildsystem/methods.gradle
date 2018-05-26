@@ -1,0 +1,25 @@
+void runShellCommandParam(String command, boolean ignoreFails) {
+
+    def shell, param
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        shell = 'cmd'
+        param = '/c'
+    } else {
+        shell = '/bin/bash'
+        param = '-c'
+    }
+
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        ignoreExitValue ignoreFails
+        workingDir rootDir
+        commandLine shell, param, "${command}"
+        //store the output instead of printing to the console:
+        standardOutput = stdout
+    }
+    println "${stdout.toString().trim()}"
+}
+
+ext {
+    runShellCommandParam = this.&runShellCommandParam
+}
