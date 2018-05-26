@@ -1,0 +1,62 @@
+def DEVICE = "device"
+
+//<editor-fold desc="Testing your app with Doze">
+
+//Force the system into idle mode by running the following command:
+task deviceInDoze(description: "Doze: Force the system into idle mode") {
+    group = DEVICE
+    doLast {
+        runShellCommandParam("adb shell dumpsys battery unplug", false)
+        runShellCommandParam("adb shell dumpsys deviceidle force-idle", false)
+    }
+}
+
+task deviceStep(description: "Step into next mode of doze or awake") {
+    group = DEVICE
+    doLast {
+        runShellCommandParam("adb shell dumpsys deviceidle step", false)
+    }
+}
+
+// When ready, exit idle mode by running the following command:
+task deviceOutOfDoze(description: "Doze: Exit idle mode") {
+    group = DEVICE
+    doLast {
+        runShellCommandParam("adb shell input keyevent 224", false)
+        runShellCommandParam("adb shell dumpsys deviceidle step", false)
+    }
+}//</editor-fold>
+
+//<editor-fold desc="Testing your app with App Standby">
+
+//Force the app into App Standby mode by running the following commands:
+task appInStandby(description: "Force the app into App Standby mode") {
+    group = DEVICE
+    doLast {
+        //  print "Package is ${applicationPackageId}"
+        runShellCommandParam("adb shell dumpsys battery unplug", false)
+        runShellCommandParam("adb shell am set-inactive ${applicationPackageId} true", false)
+    }
+}
+
+// Simulate waking your app using the following commands:
+// Observe the behavior of your app after waking it.
+// Make sure the app recovers gracefully from standby mode.
+// In particular, you should check if your app's Notifications
+// and background jobs continue to function as expected.
+task appOutOfStandby(description: "Wake up your App from Standby mode") {
+    group = DEVICE
+    doLast {
+        //  print "Package is ${applicationPackageId}"
+        runShellCommandParam("adb shell am set-inactive ${applicationPackageId} false", false)
+        runShellCommandParam("adb shell am get-inactive ${applicationPackageId}", false)
+    }
+}//</editor-fold>
+
+// Reset the battery state in order for the device to work properly after tests
+task deviceResetBatteryState(description: "Return the device to proper state") {
+    group = DEVICE
+    doLast {
+        runShellCommandParam("adb shell dumpsys battery reset", false)
+    }
+}

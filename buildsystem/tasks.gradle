@@ -1,0 +1,3 @@
+// task build(dependsOn: [rootProject.task('assemble'), rootProject.task('check')])
+// Let's keep the analysis only on the specific analysis tasks at CI for the moment
+task build(dependsOn: [rootProject.task('assembleDebug'), rootProject.task('check')])

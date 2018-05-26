@@ -1,0 +1,95 @@
+package com.madlymad.uptime.notifications;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
+
+import com.madlymad.uptime.MainActivity;
+import com.madlymad.uptime.Prefs;
+import com.madlymad.uptime.R;
+import com.madlymad.uptime.jobs.RestartReminderJob;
+
+/**
+ * Created on 22/4/2018.
+ *
+ * @author mando
+ */
+public class CreateNotification {
+    public static final int ID = 1000;
+    private static final String NOTIFICATION_CHANNEL_ID = "default";
+    //private static final String LOG_TAG = CreateNotification.class.getSimpleName();
+
+    public static void removeScheduledNotification(Context context) {
+        com.madlymad.Prefs.remove(context, Prefs.NOTIFY_MILLIS);
+        com.madlymad.Prefs.remove(context, Prefs.NOTIFY_TIMESTAMP);
+
+        removeNotification(context);
+        RestartReminderJob.cancelJob(context);
+    }
+
+    private static void removeNotification(Context context) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.cancelAll();
+        }
+    }
+
+    private static PendingIntent getPendingIntent(Context context) {
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static Notification getNotification(Context context) {
+        String content = context.getString(R.string.restart_device);
+        initChannels(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
+        builder.setContentTitle(context.getString(R.string.restart));
+        builder.setContentText(content);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(content));
+        builder.setSmallIcon(R.drawable.ic_notification);
+        builder.setContentIntent(getPendingIntent(context));
+
+        Notification notification = builder.build();
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
+        return notification;
+    }
+
+    private static void initChannels(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+                    context.getString(R.string.uptime),
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(context.getString(R.string.restart));
+
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public static boolean isScheduled(Context context) {
+        return RestartReminderJob.isScheduled(context);
+    }
+
+    public static void scheduleNotification(Context context, long elapsedTime) {
+        com.madlymad.Prefs.setValue(context, Prefs.NOTIFY_MILLIS, elapsedTime);
+        com.madlymad.Prefs.setValue(context, Prefs.NOTIFY_TIMESTAMP,
+                System.currentTimeMillis() + elapsedTime - SystemClock.elapsedRealtime());
+
+        long inMs = elapsedTime - SystemClock.elapsedRealtime();
+        if (inMs <= 0) {
+            inMs = 0;
+        }
+        RestartReminderJob.schedule(context, inMs);
+    }
+}

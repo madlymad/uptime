@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/caches
+.DS_Store
+build/
+release/
+/captures
+.externalNativeBuild
+/app/google-services.json
+/app/src/main/res/raw/third_party_license_metadata
+/app/src/main/res/raw/third_party_licenses
+/fastlane/README.md
+/fastlane/report.xml

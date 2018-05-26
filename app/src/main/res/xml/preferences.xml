@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/action_about">
+
+    <android.support.v7.preference.CheckBoxPreference
+        android:key="@string/key_crashlytics_on"
+        android:summary="@string/provide_crash_data_summary"
+        android:title="@string/provide_crash_data" />
+
+    <android.support.v7.preference.Preference
+        android:key="@string/key_license"
+        android:title="@string/licenses" />
+
+    <android.support.v7.preference.Preference
+        android:key="@string/key_privacy"
+        android:title="@string/privacy_policy" />
+
+    <android.support.v7.preference.Preference
+        android:key="@string/key_terms"
+        android:title="@string/terms_and_conditions" />
+
+    <android.support.v7.preference.Preference
+        android:key="@string/key_credits"
+        android:title="@string/credits" />
+
+    <android.support.v7.preference.Preference
+        android:key="@string/key_version"
+        android:title="@string/version" />
+
+    <android.support.v7.preference.PreferenceScreen
+        android:key="@string/key_developer_screen"
+        android:summary="@string/developer_options_summary"
+        android:title="@string/developer_options">
+
+        <android.support.v14.preference.SwitchPreference android:key="@string/key_developer" />
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/key_logs_enable"
+            android:title="@string/enable_logging" />
+
+        <android.support.v7.preference.Preference
+            android:key="@string/key_logs_email"
+            android:title="@string/email_logs" />
+
+        <android.support.v7.preference.Preference
+            android:key="@string/key_logs_show"
+            android:title="@string/show_logs" />
+
+        <android.support.v7.preference.Preference
+            android:key="@string/key_logs_delete"
+            android:title="@string/delete_logs" />
+
+    </android.support.v7.preference.PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>

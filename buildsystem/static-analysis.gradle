@@ -1,0 +1,66 @@
+apply plugin: 'com.novoda.static-analysis'
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+def ANALYSIS_CONFIG = rootDir.absolutePath + File.separator + "buildsystem" + File.separator + "static-analysis-config"
+
+staticAnalysis {
+
+    penalty {
+//        none
+        maxErrors = 0
+        maxWarnings = 0
+    }
+
+    checkstyle {
+        // http://checkstyle.sourceforge.net/releasenotes.html
+        toolVersion '8.9'
+        exclude project.fileTree('src/test/java')
+        exclude project.fileTree('src/androidTest/java')
+        exclude '**/*.kt'
+        configFile rootProject.file(ANALYSIS_CONFIG + File.separator + 'checkstyle-modules.xml')
+        includeVariants { variant -> excludeTestAndRelease(variant) }
+    }
+
+    pmd {
+        // https://pmd.github.io/
+        toolVersion '6.2.0'
+        exclude project.fileTree('src/test/java')
+        exclude project.fileTree('src/androidTest/java')
+
+        ruleSetFiles = rootProject.files(ANALYSIS_CONFIG + File.separator + 'pmd-rules.xml')
+        // Note: this is a workaround to make the <exclude-pattern>s in pmd-rules.xml actually work
+        // https://stackoverflow.com/questions/32247190/pmd-exclude-pattern-with-gradle
+        ruleSets = []
+        includeVariants { variant -> excludeTestAndRelease(variant) }
+    }
+
+    findbugs {
+        // http://findbugs.sourceforge.net/
+        toolVersion '3.0.1'
+        excludeFilter rootProject.file(ANALYSIS_CONFIG + File.separator + 'findbugs-excludes.xml')
+        includeVariants { variant -> excludeTestAndRelease(variant) }
+    }
+
+    lintOptions {
+        // https://developer.android.com/studio/write/lint.html
+        lintConfig rootProject.file(ANALYSIS_CONFIG + File.separator + 'lint-config.xml')
+        checkReleaseBuilds false
+        warningsAsErrors true
+    }
+
+    // For Kotlin code
+//    detekt {
+//        // https://github.com/arturbosch/detekt
+//        version = "$detekt_version" // When unspecified the latest detekt version
+//        profile('main') {
+//            input = project.file("src/main/java")
+//            config = rootProject.file(ANALYSIS_CONFIG + File.separator + 'detekt-config.yml')
+//            filters = '.*test.*,.*/resources/.*,.*/tmp/.*'
+//            output = project.file("build/reports/detekt")
+//        }
+//    }
+}
+
+static boolean excludeTestAndRelease(variant) {
+    return !variant.name.toLowerCase().endsWith('test') && !variant.name.toLowerCase().endsWith('release')
+}

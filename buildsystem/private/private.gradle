@@ -1,0 +1,28 @@
+import groovy.text.GStringTemplateEngine
+
+task replacePrivateData() {
+    group = "private"
+
+    // load template file
+    def template = file("$rootDir/buildsystem/private/google-services.json.template")
+    // changing file via stage
+    def appProperties = file("$rootDir/app/google-services.json")
+    outputs.file appProperties
+    outputs.upToDateWhen {
+        false
+    }
+
+    doLast {
+        // change file contents
+        def tmp = new GStringTemplateEngine()
+                .createTemplate(template)
+                .make(google_services_map)
+        appProperties.write(tmp.toString(), 'UTF-8')
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'processDebugGoogleServices') {
+        task.dependsOn replacePrivateData
+    }
+}

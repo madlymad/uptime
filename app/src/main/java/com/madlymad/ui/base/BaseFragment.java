@@ -1,0 +1,56 @@
+package com.madlymad.ui.base;
+
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+
+/**
+ * Created on 23/3/2018.
+ *
+ * @author mando
+ */
+
+public class BaseFragment extends Fragment {
+
+    private String previousTitle;
+    private String currentTitle;
+
+    public void setTitle(@StringRes int title) {
+        if (isAdded() && getActivity() != null) {
+            getActivity().setTitle(title);
+        }
+        currentTitle = getString(title);
+    }
+
+    protected void setTitle(String title) {
+        if (isAdded() && getActivity() != null) {
+            getActivity().setTitle(title);
+        }
+        currentTitle = title;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (getActivity() != null) {
+            previousTitle = (String) getActivity().getTitle();
+
+            if (!TextUtils.isEmpty(currentTitle)) {
+                getActivity().setTitle(currentTitle);
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (getActivity() != null) {
+            if (!TextUtils.isEmpty(previousTitle)) {
+                getActivity().setTitle(previousTitle);
+            }
+        }
+    }
+
+}
