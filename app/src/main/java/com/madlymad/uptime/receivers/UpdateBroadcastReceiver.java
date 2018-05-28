@@ -32,8 +32,13 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver {
         LtoF.logFile(context, Log.DEBUG, "[" + LOG_TAG + "] action: " + intent.getAction());
 
         // Set the alarm
-        long daysInMilliseconds = com.madlymad.Prefs.getLongValue(context, Prefs.NOTIFY_MILLIS);
+        long daysInMilliseconds = Prefs.getLongValue(context, Prefs.NOTIFY_MILLIS);
         if (daysInMilliseconds > 0) {
+            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+                // We just rebooted so calculate next restart timestamp!
+                Prefs.setTimestampFromMilliseconds(context, daysInMilliseconds);
+            }
+
             CreateNotification.scheduleNotification(context, daysInMilliseconds);
         }
 

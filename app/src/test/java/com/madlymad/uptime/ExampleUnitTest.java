@@ -1,5 +1,7 @@
 package com.madlymad.uptime;
 
+import com.madlymad.uptime.constants.Measure;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -33,10 +35,9 @@ public class ExampleUnitTest {
 
     @Test
     public void checkTimeConversion() {
-        assertEquals(60 * 60 * 1000, TextFormatUtils.convertToMillis(TextFormatUtils.HOURS, 1));
-        assertEquals(24 * 60 * 60 * 1000, TextFormatUtils.convertToMillis(TextFormatUtils.DAYS, 1));
-        assertEquals(7 * 24 * 60 * 60 * 1000, TextFormatUtils.convertToMillis(TextFormatUtils.WEEKS, 1));
-        assertEquals(30 * 24 * 60 * 60 * 1000L, TextFormatUtils.convertToMillis(TextFormatUtils.MONTHS, 1));
-        assertEquals(12 * 30 * 24 * 60 * 60 * 1000L, TextFormatUtils.convertToMillis(TextFormatUtils.MONTHS, 12));
+        assertEquals(60 * 60 * 1000, TextFormatUtils.convertToMillis(Measure.MEASURE_IN_HOURS, 1));
+        assertEquals(24 * 60 * 60 * 1000, TextFormatUtils.convertToMillis(Measure.MEASURE_IN_DAYS, 1));
+        assertEquals(30 * 24 * 60 * 60 * 1000L, TextFormatUtils.convertToMillis(Measure.MEASURE_IN_MONTHS, 1));
+        assertEquals(12 * 30 * 24 * 60 * 60 * 1000L, TextFormatUtils.convertToMillis(Measure.MEASURE_IN_MONTHS, 12));
     }
 }

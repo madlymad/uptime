@@ -3,6 +3,8 @@ package com.madlymad.uptime;
 import android.content.Context;
 import android.os.SystemClock;
 
+import com.madlymad.uptime.constants.Measure;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -17,10 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class TextFormatUtils {
 
     public static final String GITLAB_PAGES = "https://madlymad.gitlab.io/uptime/";
-    public static final int HOURS = 0;
-    public static final int DAYS = 1;
-    public static final int WEEKS = 2;
-    public static final int MONTHS = 3;
+
 
     public static String getUptimeString() {
         long milis = SystemClock.elapsedRealtime();
@@ -38,13 +37,11 @@ public class TextFormatUtils {
 
     public static long convertToMillis(int measurement, long time) {
         switch (measurement) {
-            case HOURS:
+            case Measure.MEASURE_IN_HOURS:
                 return TimeUnit.HOURS.toMillis(time);
-            case DAYS:
+            case Measure.MEASURE_IN_DAYS:
                 return TimeUnit.DAYS.toMillis(time);
-            case WEEKS:
-                return TimeUnit.DAYS.toMillis(time) * 7;
-            case MONTHS:
+            case Measure.MEASURE_IN_MONTHS:
                 return TimeUnit.DAYS.toMillis(time) * 30;
         }
         return 0;
@@ -87,7 +84,7 @@ public class TextFormatUtils {
     }
 
     public static String getDateString(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy\nHH:mm", Locale.US);
         return dateFormat.format(date);
     }
 

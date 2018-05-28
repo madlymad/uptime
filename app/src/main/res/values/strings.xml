@@ -11,6 +11,7 @@
     <string name="notify_every">Notify every</string>
     <string name="apply">Apply</string>
     <string name="unset">Unset</string>
+    <string name="schedule">Schedule</string>
     <string name="title">Title</string>
     <string name="smart_display">Smart time display</string>
     <string name="smart_time_details">Time will adapt smartly so as to be human readable</string>
@@ -18,11 +19,10 @@
     <string name="widget_details">Note: After adding the widget resize according to your needs, so as the selected texts fit better.</string>
     <!-- Measure values -->
     <string name="days">days</string>
-    <string name="weeks">weeks</string>
     <string name="months">months</string>
     <string name="hours">hours</string>
-    <!-- End of Measure values -->
-    <string name="notification_settings">Restart Notification Settings</string>
+    <!-- End of com.madlymad.uptime.constants.Measure values -->
+    <string name="restart_notification">Restart Notification</string>
     <string name="notify_error">Given value is not accepted.</string>
     <string name="no_scheduled_notifications">No scheduled restart notifications</string>
     <string name="scheduled_notification">Next scheduled notification is at %s</string>
@@ -63,5 +63,10 @@
     <string name="permission_granted">Permission Granted</string>
     <string name="permission_denied">Permission Denied\n %s</string>
     <string name="deny_permission_message">If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] &gt; [Permission]</string>
+    <string name="notification_picker_text">When device is running for …</string>
+    <string name="picker_dialog_title">Schedule Restart Notification</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_value">Set value</string>
+    <string name="set_metric">Set metric</string>
 
 </resources>

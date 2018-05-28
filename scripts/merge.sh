@@ -11,6 +11,11 @@ fromBranch=master
 upBranch=upstream/master
 localBranch=github_master
 
+repo_dir=$(git rev-parse --git-dir)
+cd ${repo_dir}/..
+
+echo "Current location: `pwd`"
+
 git branch --set-upstream-to=${upBranch} ${localBranch}
 
 currentBranch=$(git branch | grep \* | cut -d ' ' -f2-)
@@ -24,16 +29,21 @@ git fetch
 git pull
 
 # Merge the origin/master into the github_master
-git merge master
+git merge --squash --strategy-option theirs master -m "Merge to github" && echo "Squash complete"
 
-# Reset the github_master to its upstream state
-git reset upstream/master
+sleep 2
+git reset --soft ${upBranch} && echo "Soft reset to latest upstream"
+
+# Clear any private data
+./scripts/clearPrivate.sh && echo "Private data cleared"
 
 # Git now considers all changes as unstaged changes.
 # We can add these changes as one commit.
 # Adding . will also add untracked files.
-git add --all
-git commit
+git add --all  && echo "Everything is added please add a commit message!"
+
+sleep 2
+git commit && echo -e "\nFor push use:\n\n\t git push upstream github_master:master"
 
 
 cd ${currentDir}

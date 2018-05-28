@@ -1,9 +1,11 @@
 package com.madlymad.uptime;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,15 +13,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.madlymad.debug.DebugConf;
 import com.madlymad.debug.LtoF;
+import com.madlymad.uptime.models.NotificationViewModel;
+import com.madlymad.uptime.models.TimePickerViewModel;
 import com.madlymad.uptime.notifications.CreateNotification;
 import com.madlymad.uptime.receivers.Receivers;
 import com.madlymad.uptime.widget.Update;
@@ -30,16 +32,19 @@ import java.util.Date;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements
+        TimePickerDialogFragment.TimeDialogListener {
 
     public static final String TAG = "app_config";
     private static final String LOG_TAG = "Main";
     private Chronometer chronometer;
-    private EditText daysView;
-    private TextView nextView;
-    private Spinner measureSpinner;
-    private Button unset;
+    private ImageButton unset;
     private TextView errorView;
+    private TextView apply;
+
+    private NotificationViewModel notificationViewModel;
+    private TimePickerViewModel timePickerViewModel;
+
     public MainActivityFragment() {
     }
 
@@ -56,7 +61,24 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initializeModels();
         return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    private void initializeModels() {
+        if (getActivity() != null) {
+            // The ViewModelStore provides a new ViewModel or one previously created.
+            notificationViewModel
+                    = ViewModelProviders.of(getActivity()).get(NotificationViewModel.class);
+            timePickerViewModel = ViewModelProviders.of(getActivity()).get(TimePickerViewModel.class);
+
+            notificationViewModel.getData().observe(this, timers -> {
+                if (timers != null && timers.timestamp != 0) {
+                    updateNotifications(timers.elapsedTime);
+                }
+                updateUI();
+            });
+        }
     }
 
     @Override
@@ -68,40 +90,16 @@ public class MainActivityFragment extends Fragment {
         chronometer.start();
 
         unset = view.findViewById(R.id.buttonUnset);
-        nextView = view.findViewById(R.id.textViewNotificationDetails);
-        daysView = view.findViewById(R.id.editTextDays);
-        measureSpinner = view.findViewById(R.id.spinnerMeasure);
         errorView = view.findViewById(R.id.textViewNotificationAlert);
 
-        Button apply = view.findViewById(R.id.buttonApply);
-        apply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int number = Integer.parseInt(daysView.getText().toString());
-                int position = measureSpinner.getSelectedItemPosition();
-                long duration = TextFormatUtils.convertToMillis(position, number);
-                if (duration > 0) {
-                    com.madlymad.Prefs.setValue(getContext(), Prefs.NOTIFY_MEASURE, position);
-                    com.madlymad.Prefs.setValue(getContext(), Prefs.NOTIFY_NUMBER, number);
+        apply = view.findViewById(R.id.buttonApply);
+        apply.setOnClickListener(view12 -> showSchedule());
 
-                    CreateNotification.scheduleNotification(getContext(), duration);
-                    Receivers.checkReceivers(getContext());
-                } else {
-                    Toast.makeText(getContext(), R.string.notify_error, Toast.LENGTH_LONG).show();
-                }
+        unset.setOnClickListener(view1 -> {
+            CreateNotification.removeScheduledNotification(getContext());
+            Receivers.checkReceivers(getContext());
 
-                updateUI();
-            }
-        });
-
-        unset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CreateNotification.removeScheduledNotification(getContext());
-                Receivers.checkReceivers(getContext());
-
-                updateUI();
-            }
+            updateUI();
         });
 
         Receivers.checkReceivers(getContext());
@@ -111,8 +109,13 @@ public class MainActivityFragment extends Fragment {
 
     private void updateUI() {
         boolean showRestart = false;
-        long timestamp = com.madlymad.Prefs.getLongValue(getContext(), Prefs.NOTIFY_TIMESTAMP);
-        long elapsedRestart = com.madlymad.Prefs.getLongValue(getContext(), Prefs.NOTIFY_MILLIS);
+        if (notificationViewModel.getData() == null
+                || notificationViewModel.getData().getValue() == null) {
+            return;
+        }
+
+        long timestamp = notificationViewModel.getData().getValue().timestamp;
+
         Date date = new Date(timestamp);
         String myDate = TextFormatUtils.getDateString(date);
         boolean isScheduled = CreateNotification.isScheduled(getContext());
@@ -123,14 +126,8 @@ public class MainActivityFragment extends Fragment {
                     + " isScheduled: " + isScheduled);
         }
 
-        if (!isScheduled && timestamp > 0) {
-            // TODO improve scheduling
-            CreateNotification.scheduleNotification(getContext(), elapsedRestart);
-            isScheduled = CreateNotification.isScheduled(getContext());
-        }
-
         if (isScheduled) {
-            nextView.setText(getString(R.string.scheduled_notification, myDate));
+            apply.setText(myDate);
             unset.setVisibility(View.VISIBLE);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
@@ -139,11 +136,9 @@ public class MainActivityFragment extends Fragment {
                 showRestart = true;
             }
         } else {
-            nextView.setText(R.string.no_scheduled_notifications);
+            apply.setText(R.string.schedule);
             unset.setVisibility(View.GONE);
         }
-        daysView.setText(String.valueOf(com.madlymad.Prefs.getIntValue(getContext(), Prefs.NOTIFY_NUMBER)));
-        measureSpinner.setSelection(com.madlymad.Prefs.getIntValue(getContext(), Prefs.NOTIFY_MEASURE));
 
         errorView.setVisibility(showRestart ? View.VISIBLE : View.GONE);
     }
@@ -176,5 +171,35 @@ public class MainActivityFragment extends Fragment {
         if (chronometer != null) {
             chronometer.stop();
         }
+    }
+
+    public void showSchedule() {
+        FragmentManager fm = getFragmentManager();
+        if (fm != null) {
+            TimePickerDialogFragment dialogFragment = TimePickerDialogFragment.newInstance(this);
+            dialogFragment.show(fm, "fragment_edit_name");
+        }
+    }
+
+    @Override
+    public void onDateSetDialog(int numericValue, int measurementValue) {
+        Log.d(LOG_TAG, "number [" + numericValue + "] measurement [" + measurementValue + "]");
+
+        long duration = TextFormatUtils.convertToMillis(measurementValue, numericValue);
+        if (duration > 0) {
+            notificationViewModel.setData(duration);
+            timePickerViewModel.storeData();
+        } else {
+            Toast.makeText(getContext(), R.string.notify_error, Toast.LENGTH_LONG).show();
+        }
+
+        updateUI();
+    }
+
+    private void updateNotifications(long duration) {
+        Log.d(LOG_TAG, "updateNotifications [" + duration + "]");
+
+        CreateNotification.scheduleNotification(getContext(), duration);
+        Receivers.checkReceivers(getContext());
     }
 }

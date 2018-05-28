@@ -88,13 +88,21 @@ public class Prefs {
         editor.apply();
     }
 
-    public static long getLongValue(Context context, String key) {
+    public static long getLongValue(Context context, String key, long defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getLong(key, 0);
+        return preferences.getLong(key, defaultValue);
+    }
+
+    public static long getLongValue(Context context, String key) {
+        return getLongValue(context, key, 0);
+    }
+
+    public static int getIntValue(Context context, String key, int defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getInt(key, defaultValue);
     }
 
     public static int getIntValue(Context context, String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getInt(key, 0);
+        return getIntValue(context, key, 0);
     }
 }

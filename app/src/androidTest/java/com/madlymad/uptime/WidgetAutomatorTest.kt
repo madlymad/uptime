@@ -103,7 +103,7 @@ class WidgetAutomatorTest {
         val inSec = SystemClock.elapsedRealtime() / 1000 / 60
         val min = inSec / 60
         val sec = inSec - min * 60
-        val text = min.toString() + ":" + sec
+        val text = min.toString() + ":" + String.format("%02d", sec)
 
         Assert.assertEquals(text, timerWidget.text)
     }

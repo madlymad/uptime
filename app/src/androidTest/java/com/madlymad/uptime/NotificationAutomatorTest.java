@@ -38,6 +38,7 @@ public class NotificationAutomatorTest {
     private static final String NOTIFICATION_TEXT = "Time has come to restart your device. Its important for its well-being!";
     public static final String ANDROID_WIDGET_BUTTON = "android.widget.Button";
     private static final String ANDROID_WIDGET_EDIT_TEXT = "android.widget.EditText";
+    private static final String ANDROID_WIDGET_TEXT_VIEW = "android.widget.TextView";
     private UiDevice mDevice;
 
     @Before
@@ -75,14 +76,33 @@ public class NotificationAutomatorTest {
         assert okButton.exists() && okButton.isEnabled();
         okButton.click();
 
-        UiObject editText = mDevice.findObject(new UiSelector()
-                .className(ANDROID_WIDGET_EDIT_TEXT));
+        UiObject schedule = mDevice.findObject(new UiSelector()
+                .text("Schedule")
+                .className(ANDROID_WIDGET_TEXT_VIEW));
 
         // Simulate a user-click on the OK button, if found.
-        assert editText.exists() && editText.isEnabled();
-        editText.click();
-        editText.clearTextField();
-        editText.setText("1");
+        assert schedule.exists() && schedule.isEnabled();
+        schedule.click();
+
+        UiObject numberPicker = mDevice.findObject(new UiSelector()
+                .className(ANDROID_WIDGET_EDIT_TEXT)
+                .text("7"));
+        numberPicker.setText("1");
+        // To set the value we have to click it!
+        numberPicker = mDevice.findObject(new UiSelector()
+                .className(ANDROID_WIDGET_EDIT_TEXT)
+                .text("1"));
+        numberPicker.click();
+
+        UiObject measurePicker = mDevice.findObject(new UiSelector()
+                .className(ANDROID_WIDGET_EDIT_TEXT)
+                .text("days"));
+        measurePicker.setText("hours");
+        // To set the value we have to click it!
+        measurePicker = mDevice.findObject(new UiSelector()
+                .className(ANDROID_WIDGET_EDIT_TEXT)
+                .text("hours"));
+        measurePicker.click();
 
         UiObject applyButton = mDevice.findObject(new UiSelector()
                 .text("Apply")

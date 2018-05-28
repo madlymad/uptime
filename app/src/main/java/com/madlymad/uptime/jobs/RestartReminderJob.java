@@ -25,7 +25,7 @@ public class RestartReminderJob extends Job {
     private static final String LOG_TAG = "RestartJob";
 
     public static void schedule(Context context, long inMs) {
-        if (isScheduled(context)) {
+        if (isScheduled(context, inMs)) {
             return;
         }
 
@@ -43,9 +43,27 @@ public class RestartReminderJob extends Job {
         builder.build().schedule();
     }
 
-
     public static boolean isScheduled(Context context) {
         if (!JobManager.instance().getAllJobRequestsForTag(TAG).isEmpty()) {
+
+            // job already scheduled, nothing to do
+            LtoF.logFile(context, Log.VERBOSE, "[" + LOG_TAG + "] already scheduled");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isScheduled(Context context, long inMs) {
+        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TAG);
+        if (!jobRequests.isEmpty()) {
+            for (JobRequest request : jobRequests) {
+                if (request.getIntervalMs() != inMs) {
+                    LtoF.logFile(context, Log.VERBOSE,
+                            "[" + LOG_TAG + "] current scheduled [" + request.getIntervalMs() + "] is outdated");
+                    return false;
+                }
+            }
+
             // job already scheduled, nothing to do
             LtoF.logFile(context, Log.VERBOSE, "[" + LOG_TAG + "] already scheduled");
             return true;
