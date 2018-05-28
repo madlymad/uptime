@@ -26,8 +26,10 @@ public class CreateNotification {
     //private static final String LOG_TAG = CreateNotification.class.getSimpleName();
 
     public static void removeScheduledNotification(Context context) {
-        com.madlymad.Prefs.remove(context, Prefs.NOTIFY_MILLIS);
-        com.madlymad.Prefs.remove(context, Prefs.NOTIFY_TIMESTAMP);
+        Prefs.remove(context, Prefs.NOTIFY_MILLIS);
+        Prefs.remove(context, Prefs.NOTIFY_TIMESTAMP);
+        Prefs.remove(context, Prefs.NOTIFY_MEASURE);
+        Prefs.remove(context, Prefs.NOTIFY_NUMBER);
 
         removeNotification(context);
         RestartReminderJob.cancelJob(context);
@@ -82,10 +84,6 @@ public class CreateNotification {
     }
 
     public static void scheduleNotification(Context context, long elapsedTime) {
-        com.madlymad.Prefs.setValue(context, Prefs.NOTIFY_MILLIS, elapsedTime);
-        com.madlymad.Prefs.setValue(context, Prefs.NOTIFY_TIMESTAMP,
-                System.currentTimeMillis() + elapsedTime - SystemClock.elapsedRealtime());
-
         long inMs = elapsedTime - SystemClock.elapsedRealtime();
         if (inMs <= 0) {
             inMs = 0;

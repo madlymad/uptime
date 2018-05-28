@@ -1,24 +1,37 @@
-#Publish my private repository code to GitHub
+# Publish my private repository code to GitHub
 
-##Working on a new repository
+------------------------------------------------------
 
-###Step 1. Configure the GitHub in my repository
+## Working on a new repository
+
+### Step 1. Configure the GitHub in my repository
 
     cd scripts
     ./config.sh
 
-###Step 2. Remove project private data
+### Step 2. Remove project private data
 
     cd scripts
     ./clearPrivate.sh
 
-##Working on an existing repository
+### Step 3. Add and commit
 
-###Step 1. Merge latest master to GitHub
+    git add .
+    git commit -m "Initial commit"
+
+### Step 4. Push to upstream
+
+    git push -u upstream github_master:master
+
+------------------------------------------------------
+
+## Working on an existing repository
+
+### Step 1. Merge latest master to GitHub
 
     cd scripts
     ./merge.sh
 
-###Step 2. Validate commit message and push the code
+### Step 2. Validate commit message and push the code
 
-    git push upstream master
+    git push upstream github_master:master

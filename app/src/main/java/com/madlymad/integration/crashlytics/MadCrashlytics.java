@@ -55,13 +55,10 @@ public class MadCrashlytics {
                 (CrashlyticsDialogFragment) fm.findFragmentByTag(CrashlyticsDialogFragment.TAG);
         if (crashlyticsDialogFragment == null) {
             crashlyticsDialogFragment = CrashlyticsDialogFragment.newInstance(
-                    new CrashlyticsDialogFragment.AcceptDialogListener() {
-                        @Override
-                        public void onFinishDialog(boolean accepted) {
-                            Prefs.setValue(context, R.string.key_crashlytics_on, accepted);
-                            if (accepted) {
-                                start(context);
-                            }
+                    accepted -> {
+                        Prefs.setValue(context, R.string.key_crashlytics_on, accepted);
+                        if (accepted) {
+                            start(context);
                         }
                     });
             crashlyticsDialogFragment.show(fm, CrashlyticsDialogFragment.TAG);

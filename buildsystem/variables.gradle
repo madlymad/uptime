@@ -2,8 +2,8 @@ apply from: "$rootDir/private/secret.gradle"
 
 ext {
     applicationPackageId = "com.madlymad.uptime"
-    applicationVersionName = "0.11"
-    applicationVersionCode = 12
+    applicationVersionName = "0.12"
+    applicationVersionCode = 13
 
     // Target & Compile SDK version
     appSdkVersion = 27
@@ -13,6 +13,7 @@ ext {
     // Static analysis tools
     detekt_version = "1.0.0.M13.2"
 
-    // Version definitions
+    // Library dependencies
     kotlin_version = '1.2.41'
+    lifecycle_version = '1.1.1'
 }

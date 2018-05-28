@@ -1,22 +1,21 @@
 package com.madlymad.integration.crashlytics;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import com.madlymad.ui.base.BaseDialogFragment;
 import com.madlymad.uptime.R;
 
 import java.util.Objects;
 
-public class CrashlyticsDialogFragment extends DialogFragment {
+public class CrashlyticsDialogFragment extends BaseDialogFragment {
 
     public static final String TAG = "agree_crashlytics";
     private static final String ACCEPTED = "accepted";
@@ -55,12 +54,10 @@ public class CrashlyticsDialogFragment extends DialogFragment {
                 .setView(view)
                 //.setTitle(R.string.title)
                 .setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                                if (acceptDialogListener != null) {
-                                    acceptDialogListener.onFinishDialog(mCheckBox.isChecked());
-                                }
+                        (dialog, whichButton) -> {
+                            dialog.dismiss();
+                            if (acceptDialogListener != null) {
+                                acceptDialogListener.onFinishDialog(mCheckBox.isChecked());
                             }
                         }
                 );

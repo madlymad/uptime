@@ -13,6 +13,8 @@ import java.lang.annotation.RetentionPolicy;
  * Created on 22/3/2018.
  * Usage example
  *
+ * https://firebase.google.com/docs/analytics/android/start/
+ *
  * @author mando
  */
 public class MadAnalytics {
