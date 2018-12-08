@@ -18,7 +18,7 @@ public class Receivers {
         changeComponentStateReceiver(context, enable, UpdateBroadcastReceiver.class);
     }
 
-    private static <T> void changeComponentStateReceiver(Context context, boolean enable, Class<T> cls) {
+    private static <T> void changeComponentStateReceiver(Context context, boolean enable, @SuppressWarnings("SameParameterValue") Class<T> cls) {
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();
 

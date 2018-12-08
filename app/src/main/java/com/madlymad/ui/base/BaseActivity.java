@@ -15,6 +15,7 @@ import com.madlymad.uptime.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @SuppressWarnings("SameParameterValue")
     protected void replaceFragment(Fragment fragment, String tag) {
         replaceFragment(fragment, tag, false);
     }

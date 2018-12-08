@@ -35,7 +35,7 @@ public class NotificationAutomatorTest {
     private static final int LAUNCH_TIMEOUT = 5000;
     private static final long NOTIFICATION_TIMEOUT = 5000;
     private static final String NOTIFICATION_TITLE = "Restart Device";
-    private static final String NOTIFICATION_TEXT = "Time has come to restart your device. Its important for its well-being!";
+    private static final String NOTIFICATION_TEXT = "Time has come to restart your device. It's important for its well-being!";
     public static final String ANDROID_WIDGET_BUTTON = "android.widget.Button";
     private static final String ANDROID_WIDGET_EDIT_TEXT = "android.widget.EditText";
     private static final String ANDROID_WIDGET_TEXT_VIEW = "android.widget.TextView";
@@ -103,6 +103,7 @@ public class NotificationAutomatorTest {
                 .className(ANDROID_WIDGET_EDIT_TEXT)
                 .text("hours"));
         measurePicker.click();
+        numberPicker.click();
 
         UiObject applyButton = mDevice.findObject(new UiSelector()
                 .text("Apply")
@@ -117,6 +118,7 @@ public class NotificationAutomatorTest {
         device.wait(Until.hasObject(By.text(NOTIFICATION_TITLE)), NOTIFICATION_TIMEOUT);
         UiObject2 title = device.findObject(By.text(NOTIFICATION_TITLE));
         UiObject2 text = device.findObject(By.text(NOTIFICATION_TEXT));
+        // This requires the device to run for 1 hour
         assertEquals(NOTIFICATION_TITLE, title.getText());
         assertEquals(NOTIFICATION_TEXT, text.getText());
         title.click();
