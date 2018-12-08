@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.13] - 2018-12-08
 ### Fixes
 - Recalculate the restart notification date on application start
 - Recalculate the restart notification date regularly when the widget is used
@@ -33,7 +35,8 @@
     - Credits
 - Acceptance screen for crash and analytics data
 
-[Unreleased]: https://github.com/madlymad/uptime/compare/v0.12...HEAD
+[Unreleased]: https://github.com/madlymad/uptime/compare/v0.13...HEAD
+[0.13]: https://github.com/madlymad/uptime/compare/v0.12...v0.13
 [0.12]: https://github.com/madlymad/uptime/compare/v0.11...v0.12
 [0.11]: https://github.com/madlymad/uptime/tree/v0.11
 
