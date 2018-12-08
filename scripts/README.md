@@ -1,5 +1,8 @@
 # Publish my private repository code to GitHub
 
+*This documentation can used at your own repository if you want to publish something on GitHub after
+deleting any private/own data*
+
 ------------------------------------------------------
 
 ## Working on a new repository

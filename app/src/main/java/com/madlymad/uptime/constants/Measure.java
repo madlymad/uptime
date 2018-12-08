@@ -1,6 +1,17 @@
 package com.madlymad.uptime.constants;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 public class Measure {
+    @Retention(SOURCE)
+    @IntDef({MEASURE_IN_HOURS, MEASURE_IN_DAYS, MEASURE_IN_MONTHS})
+    public @interface TimeMeasurement {
+    }
+
     public static final int MEASURE_IN_HOURS = 0;
     public static final int MEASURE_IN_DAYS = 1;
     public static final int MEASURE_IN_MONTHS = 2;

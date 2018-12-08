@@ -37,9 +37,9 @@ git reset --soft ${upBranch} && echo "Soft reset to latest upstream"
 # Clear any private data
 ./scripts/clearPrivate.sh && echo "Private data cleared"
 
-# Git now considers all changes as unstaged changes.
+# Git now considers all changes as un-staged changes.
 # We can add these changes as one commit.
-# Adding . will also add untracked files.
+# Adding . will also add un-tracked files.
 git add --all  && echo "Everything is added please add a commit message!"
 
 sleep 2

@@ -17,11 +17,13 @@ import com.madlymad.uptime.widget.Update;
 public class UpdateBroadcastReceiver extends BroadcastReceiver {
 
     private static final String LOG_TAG = UpdateBroadcastReceiver.class.getSimpleName();
+    private static final String ACTION_QUICKBOOT_POWERON = "android.intent.action.QUICKBOOT_POWERON";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (TextUtils.isEmpty(intent.getAction()) ||
-                !Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+                !Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) ||
+                !ACTION_QUICKBOOT_POWERON.equals(intent.getAction())) {
             // This shouldn't triggered.
             if (intent.getAction() != null) {
                 LtoF.logFile(context, Log.INFO,
@@ -34,7 +36,8 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver {
         // Set the alarm
         long daysInMilliseconds = Prefs.getLongValue(context, Prefs.NOTIFY_MILLIS);
         if (daysInMilliseconds > 0) {
-            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) ||
+                    ACTION_QUICKBOOT_POWERON.equals(intent.getAction())) {
                 // We just rebooted so calculate next restart timestamp!
                 Prefs.setTimestampFromMilliseconds(context, daysInMilliseconds);
             }

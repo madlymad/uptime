@@ -7,7 +7,7 @@
     <string name="active_widgets">Active widgets</string>
     <string name="device_running_for">Device running for %s</string>
     <string name="restart">Restart Device</string>
-    <string name="restart_device">Time has come to restart your device. Its important for its well-being!</string>
+    <string name="restart_device">Time has come to restart your device. It\'s important for its well-being!</string>
     <string name="notify_every">Notify every</string>
     <string name="apply">Apply</string>
     <string name="unset">Unset</string>
@@ -21,11 +21,9 @@
     <string name="days">days</string>
     <string name="months">months</string>
     <string name="hours">hours</string>
-    <!-- End of com.madlymad.uptime.constants.Measure values -->
+    <!-- End of measure values -->
     <string name="restart_notification">Restart Notification</string>
     <string name="notify_error">Given value is not accepted.</string>
-    <string name="no_scheduled_notifications">No scheduled restart notifications</string>
-    <string name="scheduled_notification">Next scheduled notification is at %s</string>
     <string name="restart_now_error">You have delayed to restart your device it is suggested to do it now!</string>
     <string name="licenses">Open Source Licenses</string>
     <string name="action_about">About</string>
