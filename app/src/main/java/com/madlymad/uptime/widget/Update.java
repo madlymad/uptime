@@ -13,7 +13,7 @@ import com.madlymad.debug.LtoF;
 import com.madlymad.uptime.BuildConfig;
 import com.madlymad.uptime.MainActivity;
 import com.madlymad.uptime.R;
-import com.madlymad.uptime.TextFormatUtils;
+import com.madlymad.uptime.TimeTextUtils;
 import com.madlymad.uptime.jobs.WidgetUpdateJob;
 
 import java.util.Arrays;
@@ -37,7 +37,7 @@ public class Update {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.uptime_widget);
-        String timer = TextFormatUtils.getUptimeString();
+        String timer = TimeTextUtils.getUptimeString();
         views.setTextViewText(R.id.appwidget_timer, timer);
         views.setOnClickPendingIntent(R.id.appwidget_timer, getPendingSelfIntent(context, UPDATE_NOW, appWidgetId));
         if (DebugConf.DebugParts.WIDGET) {

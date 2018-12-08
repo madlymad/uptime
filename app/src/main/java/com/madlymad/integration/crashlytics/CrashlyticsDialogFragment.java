@@ -35,6 +35,7 @@ public class CrashlyticsDialogFragment extends BaseDialogFragment {
         return frag;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private View onCreateDialogView(LayoutInflater inflater, @Nullable ViewGroup container) {
         return inflater.inflate(R.layout.fragment_crashlytics, container); // inflate here
     }
@@ -65,7 +66,7 @@ public class CrashlyticsDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBoolean(ACCEPTED, mCheckBox.isChecked());
         getDialog().dismiss();
         super.onSaveInstanceState(outState);

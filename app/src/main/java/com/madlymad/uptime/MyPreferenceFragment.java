@@ -21,8 +21,6 @@ import com.madlymad.debug.DebugConf;
 import com.madlymad.debug.LtoF;
 import com.madlymad.ui.WebViewFragment;
 import com.madlymad.ui.base.BasePreferenceFragment;
-import com.madlymad.ui.listeners.OnActionListener;
-import com.madlymad.ui.listeners.OnChangeListener;
 
 import java.util.ArrayList;
 
@@ -68,8 +66,8 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
             setupDeveloper();
             setupLicenses();
             setupCredits();
-            setupLinks(R.string.key_privacy, TextFormatUtils.GITLAB_PAGES + "policies/privacy_policy.html");
-            setupLinks(R.string.key_terms, TextFormatUtils.GITLAB_PAGES + "policies/terms_and_conditions.html");
+            setupLinks(R.string.key_privacy, TimeTextUtils.GITLAB_PAGES + "policies/privacy_policy.html");
+            setupLinks(R.string.key_terms, TimeTextUtils.GITLAB_PAGES + "policies/terms_and_conditions.html");
         } else if (getRootKey().equals(getKey(R.string.key_developer_screen))) {
             setupLogEnabled();
             setupLogSendMail();
@@ -90,61 +88,37 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     }
 
     private void setupLicenses() {
-        setOnClickPreference(R.string.key_license, new OnActionListener() {
-            public void onAction() {
-                displayLicensesFragment();
-            }
-        });
+        setOnClickPreference(R.string.key_license, this::displayLicensesFragment);
     }
 
     private void setupCredits() {
-        setOnClickPreference(R.string.key_credits, new OnActionListener() {
-            public void onAction() {
-                displayCreditsFragment();
-            }
-        });
+        setOnClickPreference(R.string.key_credits, this::displayCreditsFragment);
     }
 
     private void setupLogEnabled() {
-        setOnChangePreference(R.string.key_logs_enable, new OnChangeListener() {
-            @Override
-            public boolean onChange(Object newValue) {
-                if (newValue instanceof Boolean) {
-                    DebugConf.setLogToFile((Boolean) newValue);
-                }
-                return true;
+        setOnChangePreference(R.string.key_logs_enable, newValue -> {
+            if (newValue instanceof Boolean) {
+                DebugConf.setLogToFile((Boolean) newValue);
             }
+            return true;
         });
     }
 
     private void setupLogSendMail() {
-        setOnClickPreference(R.string.key_logs_email, new OnActionListener() {
-            @Override
-            public void onAction() {
-                mailLogs();
-            }
-        });
+        setOnClickPreference(R.string.key_logs_email, this::mailLogs);
     }
 
     private void setupLogDelete() {
-        setOnClickPreference(R.string.key_logs_delete, new OnActionListener() {
-            @Override
-            public void onAction() {
-                deleteLogs();
-            }
-        });
+        setOnClickPreference(R.string.key_logs_delete, this::deleteLogs);
     }
 
     private void deleteLogs() {
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == AlertDialog.BUTTON_POSITIVE) {
-                    LtoF.deleteLogFile(getContext());
-                    updateSummaries();
-                }
-                dialog.dismiss();
+        DialogInterface.OnClickListener listener = (dialog, which) -> {
+            if (which == AlertDialog.BUTTON_POSITIVE) {
+                LtoF.deleteLogFile(getContext());
+                updateSummaries();
             }
+            dialog.dismiss();
         };
 
         Context context = getContext();
@@ -159,21 +133,13 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     }
 
     private void setupLogShow() {
-        setOnClickPreference(R.string.key_logs_show, new OnActionListener() {
-            @Override
-            public void onAction() {
-                displayLogFile();
-            }
-        });
+        setOnClickPreference(R.string.key_logs_show, this::displayLogFile);
     }
 
     private void setupLinks(@StringRes int key, final String url) {
-        setOnClickPreference(key, new OnActionListener() {
-            @Override
-            public void onAction() {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
-            }
+        setOnClickPreference(key, () -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
         });
     }
 

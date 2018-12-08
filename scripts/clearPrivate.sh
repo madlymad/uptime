@@ -26,5 +26,6 @@ rm .gitlab-ci.yml
 
 # Other not used files
 rm run.sh
+rm -rf .idea
 
 cd ${currentDir}

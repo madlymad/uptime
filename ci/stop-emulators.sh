@@ -8,5 +8,5 @@
 adb devices
 
 PORT=$(adb devices | grep emulator | sed -e 's/.*[^0-9]\([0-9]\+\)[^0-9]*$/\1/' | tr -d '\r')
-echo killing emulator-$PORT...
-adb -s emulator-$PORT emu kill || true
+echo killing emulator-${PORT}...
+adb -s emulator-${PORT} emu kill || true

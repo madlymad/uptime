@@ -9,7 +9,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.madlymad.debug.DebugConf;
@@ -77,12 +76,7 @@ public class UptimeWidgetConfigureActivity extends Activity {
         mAppWidgetText = findViewById(R.id.appwidget_text);
         textViewCheckDetails = findViewById(R.id.textCheckDetails);
         mAppWidgetSmartTime = findViewById(R.id.checkboxSmartDisplay);
-        mAppWidgetSmartTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                updateTextViewDetails();
-            }
-        });
+        mAppWidgetSmartTime.setOnCheckedChangeListener((compoundButton, isChecked) -> updateTextViewDetails());
 
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 

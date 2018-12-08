@@ -67,6 +67,7 @@ public class MainActivityFragment extends Fragment implements
 
     private void initializeModels() {
         if (getActivity() != null) {
+            Prefs.updateNotificationDate(getActivity());
             // The ViewModelStore provides a new ViewModel or one previously created.
             notificationViewModel
                     = ViewModelProviders.of(getActivity()).get(NotificationViewModel.class);
@@ -117,7 +118,7 @@ public class MainActivityFragment extends Fragment implements
         long timestamp = notificationViewModel.getData().getValue().timestamp;
 
         Date date = new Date(timestamp);
-        String myDate = TextFormatUtils.getDateString(date);
+        String myDate = TimeTextUtils.getDateString(date);
         boolean isScheduled = CreateNotification.isScheduled(getContext());
 
         if (DebugConf.DebugParts.NOTIFICATION) {
@@ -185,7 +186,7 @@ public class MainActivityFragment extends Fragment implements
     public void onDateSetDialog(int numericValue, int measurementValue) {
         Log.d(LOG_TAG, "number [" + numericValue + "] measurement [" + measurementValue + "]");
 
-        long duration = TextFormatUtils.convertToMillis(measurementValue, numericValue);
+        long duration = TimeTextUtils.convertToMillis(measurementValue, numericValue);
         if (duration > 0) {
             notificationViewModel.setData(duration);
             timePickerViewModel.storeData();

@@ -116,25 +116,18 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     protected void setOnClickPreference(@StringRes int key, @NonNull final OnActionListener onActionListener) {
         Preference preference = getPreference(key);
         if (preference != null) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    onActionListener.onAction();
-                    return true;
-                }
+            preference.setOnPreferenceClickListener(preference1 -> {
+                onActionListener.onAction();
+                return true;
             });
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void setOnChangePreference(@StringRes int key, @NonNull final OnChangeListener onChangeListener) {
         Preference preference = getPreference(key);
         if (preference != null) {
-            preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    return onChangeListener.onChange(newValue);
-                }
-            });
+            preference.setOnPreferenceChangeListener((preference1, newValue) -> onChangeListener.onChange(newValue));
         }
     }
 

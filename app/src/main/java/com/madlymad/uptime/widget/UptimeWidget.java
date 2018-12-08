@@ -13,7 +13,7 @@ import com.madlymad.debug.DebugConf;
 import com.madlymad.debug.LtoF;
 import com.madlymad.debug.Print;
 import com.madlymad.uptime.R;
-import com.madlymad.uptime.TextFormatUtils;
+import com.madlymad.uptime.TimeTextUtils;
 
 import java.util.Arrays;
 
@@ -113,7 +113,7 @@ public class UptimeWidget extends AppWidgetProvider {
             Update.updateWidget(context, appWidgetId);
 
             Toast.makeText(context,
-                    context.getString(R.string.device_running_for, TextFormatUtils.getUptimePrettyString(context)),
+                    context.getString(R.string.device_running_for, TimeTextUtils.getUptimePrettyString(context)),
                     Toast.LENGTH_LONG).show();
         }
     }

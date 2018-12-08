@@ -1,7 +1,10 @@
 package com.madlymad.uptime;
 
 import android.content.Context;
-import android.os.SystemClock;
+
+import com.madlymad.uptime.notifications.CreateNotification;
+
+import java.util.Date;
 
 /**
  * Created on 18/3/2018.
@@ -34,6 +37,20 @@ public class Prefs extends com.madlymad.Prefs {
 
     public static void setTimestampFromMilliseconds(Context context, long milliseconds) {
         Prefs.setValue(context, Prefs.NOTIFY_TIMESTAMP,
-                System.currentTimeMillis() + milliseconds - SystemClock.elapsedRealtime());
+                TimeTextUtils.futureDateForNowAfter(milliseconds));
+    }
+
+    public static void updateNotificationDate(Context context) {
+        long timestamp = Prefs.getLongValue(context, Prefs.NOTIFY_TIMESTAMP);
+        if (timestamp > 0) { // User has setup a notification
+            long elapsed = Prefs.getLongValue(context, Prefs.NOTIFY_MILLIS);
+            Date notify = new Date(timestamp);
+            Date now = new Date();
+            if (now.compareTo(notify) > 0) {
+                // update timestamp
+                setTimestampFromMilliseconds(context, elapsed);
+            }
+            CreateNotification.scheduleNotification(context, elapsed);
+        }
     }
 }

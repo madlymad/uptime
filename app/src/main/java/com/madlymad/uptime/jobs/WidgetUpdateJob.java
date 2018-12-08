@@ -8,6 +8,7 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.madlymad.debug.LtoF;
+import com.madlymad.uptime.Prefs;
 import com.madlymad.uptime.widget.Update;
 
 import java.util.Set;
@@ -51,6 +52,7 @@ public class WidgetUpdateJob extends Job {
 
         LtoF.logFile(getContext(), Log.DEBUG, "[" + LOG_TAG + "] onJobRun");
         Update.updateAllWidgets(getContext());
+        Prefs.updateNotificationDate(getContext());
 
         return Result.SUCCESS;
     }
