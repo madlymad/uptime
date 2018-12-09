@@ -24,7 +24,7 @@ import java.util.Arrays;
  * @author mando
  */
 public class Update {
-    public static final String UPDATE_NOW = BuildConfig.APPLICATION_ID + ".UPDATE_NOW";
+    static final String UPDATE_NOW = BuildConfig.APPLICATION_ID + ".UPDATE_NOW";
     private static final String LOG_TAG = Update.class.getSimpleName();
 
     private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -51,7 +51,7 @@ public class Update {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    public static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         if (DebugConf.DebugParts.WIDGET && appWidgetIds.length > 1) {
             LtoF.logFile(context, Log.VERBOSE, "[" + LOG_TAG + "] updateAppWidgets ids " + Arrays.toString(appWidgetIds));
         }
@@ -61,6 +61,7 @@ public class Update {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static PendingIntent getPendingSelfIntent(Context context, String action, int appWidgetId) {
         Intent intent = new Intent(context, UptimeWidget.class);
         intent.setAction(action);
@@ -92,7 +93,7 @@ public class Update {
         }
     }
 
-    public static void updateWidget(Context context, int appWidgetId) {
+    static void updateWidget(Context context, int appWidgetId) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         if (appWidgetManager != null) {
             Update.updateAppWidgets(context, appWidgetManager, new int[]{appWidgetId});

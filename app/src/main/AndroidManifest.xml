@@ -49,14 +49,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
-
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
-
         <receiver
             android:name="com.madlymad.uptime.receivers.UpdateBroadcastReceiver"
             android:enabled="false"
@@ -68,7 +60,7 @@
         </receiver>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">

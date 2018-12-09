@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.Preference;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.preference.Preference;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -33,7 +33,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
         developer = new BeDeveloper(R.string.key_developer);
     }
 
-    public static MyPreferenceFragment newInstance() {
+    static MyPreferenceFragment newInstance() {
         return new MyPreferenceFragment();
     }
 
@@ -46,6 +46,9 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     @Override
     public void onCreatePreferencesScreen(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
+        if (TextUtils.isEmpty(rootKey)) {
+            setupDeveloper();
+        }
     }
 
     @Override

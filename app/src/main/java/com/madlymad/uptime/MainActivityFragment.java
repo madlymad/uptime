@@ -1,11 +1,6 @@
 package com.madlymad.uptime;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,11 +24,16 @@ import com.madlymad.uptime.widget.Update;
 import java.util.Calendar;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements
-        TimePickerDialogFragment.TimeDialogListener {
+public class MainActivityFragment extends Fragment {
 
     public static final String TAG = "app_config";
     private static final String LOG_TAG = "Main";
@@ -48,7 +48,7 @@ public class MainActivityFragment extends Fragment implements
     public MainActivityFragment() {
     }
 
-    public static MainActivityFragment newInstance() {
+    static MainActivityFragment newInstance() {
         return new MainActivityFragment();
     }
 
@@ -174,16 +174,15 @@ public class MainActivityFragment extends Fragment implements
         }
     }
 
-    public void showSchedule() {
+    private void showSchedule() {
         FragmentManager fm = getFragmentManager();
         if (fm != null) {
-            TimePickerDialogFragment dialogFragment = TimePickerDialogFragment.newInstance(this);
+            TimePickerDialogFragment dialogFragment = TimePickerDialogFragment.newInstance();
             dialogFragment.show(fm, "fragment_edit_name");
         }
     }
 
-    @Override
-    public void onDateSetDialog(int numericValue, int measurementValue) {
+    void onDateSetDialog(int numericValue, int measurementValue) {
         Log.d(LOG_TAG, "number [" + numericValue + "] measurement [" + measurementValue + "]");
 
         long duration = TimeTextUtils.convertToMillis(measurementValue, numericValue);

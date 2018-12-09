@@ -1,6 +1,6 @@
 package com.madlymad.uptime.models.data;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

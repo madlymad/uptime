@@ -1,6 +1,14 @@
 # Changelog
 
 ## [Unreleased]
+### Fixes
+- Remove extra spacing from settings screen
+- Fix theme issue on OSS licenses
+- Fix flickering issue on developer options
+- Open links in Credits outside application
+
+### Code/Structure changes
+- Migrate to AndroidX
 
 ## [0.13] - 2018-12-08
 ### Fixes

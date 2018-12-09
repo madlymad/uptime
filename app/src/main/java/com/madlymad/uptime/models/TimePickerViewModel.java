@@ -1,7 +1,7 @@
 package com.madlymad.uptime.models;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.madlymad.uptime.Prefs;
 

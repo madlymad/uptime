@@ -2,7 +2,7 @@ package com.madlymad.integration;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 

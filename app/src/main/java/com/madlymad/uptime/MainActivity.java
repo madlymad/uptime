@@ -1,18 +1,22 @@
 package com.madlymad.uptime;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceScreen;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.madlymad.integration.crashlytics.MadCrashlytics;
 import com.madlymad.ui.WebViewFragment;
 import com.madlymad.ui.base.BaseActivity;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
+
 public class MainActivity extends BaseActivity implements
-        PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
+        PreferenceFragmentCompat.OnPreferenceStartScreenCallback,
+        TimePickerDialogFragment.TimeDialogContainer, TimePickerDialogFragment.TimeDialogListener {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,5 +67,18 @@ public class MainActivity extends BaseActivity implements
         ft.addToBackStack(preferenceScreen.getKey());
         ft.commit();
         return true;
+    }
+
+    @Override
+    public TimePickerDialogFragment.TimeDialogListener onRequestListener() {
+        return this;
+    }
+
+    @Override
+    public void onDateSetDialog(int numericValue, int measurementValue) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(MainActivityFragment.TAG);
+        if (fragment instanceof MainActivityFragment) {
+            ((MainActivityFragment) fragment).onDateSetDialog(numericValue, measurementValue);
+        }
     }
 }

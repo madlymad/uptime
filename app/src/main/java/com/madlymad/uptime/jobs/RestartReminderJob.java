@@ -2,8 +2,8 @@ package com.madlymad.uptime.jobs;
 
 import android.app.Notification;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
