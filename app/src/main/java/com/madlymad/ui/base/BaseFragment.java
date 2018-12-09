@@ -1,8 +1,9 @@
 package com.madlymad.ui.base;
 
-import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created on 23/3/2018.

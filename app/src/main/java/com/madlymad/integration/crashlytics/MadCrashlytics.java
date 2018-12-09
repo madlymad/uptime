@@ -1,7 +1,7 @@
 package com.madlymad.integration.crashlytics;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.madlymad.Prefs;

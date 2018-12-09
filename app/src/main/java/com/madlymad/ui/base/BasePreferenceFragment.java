@@ -2,16 +2,16 @@ package com.madlymad.ui.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v14.preference.MultiSelectListPreference;
-import android.support.v14.preference.SwitchPreference;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceGroup;
-import android.support.v7.preference.PreferenceScreen;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.preference.MultiSelectListPreference;
+import androidx.preference.SwitchPreference;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -149,6 +149,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
      * @param key        the key to compare if refer to this preference
      * @return <code>true</code> in case the screen is added and that two keys are equal
      */
+    @SuppressWarnings("SameParameterValue")
     protected boolean is(Preference preference, @StringRes int key) {
         return getContext() != null && Prefs.getKey(getContext(), key).equals(preference.getKey());
     }

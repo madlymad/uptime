@@ -2,17 +2,14 @@
 
 package com.madlymad.uptime
 
-import android.content.res.Resources
 import android.graphics.Point
 import android.os.SystemClock
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
-import android.support.test.uiautomator.*
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.*
 import com.madlymad.uptime.NotificationAutomatorTest.ANDROID_WIDGET_BUTTON
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
 /**
  * Created on 28/4/2018.
@@ -26,7 +23,6 @@ const val TIMEOUT: Long = 5000
 const val WIDGET_SELECTION_AT_X: Boolean = true
 const val WIDGET_NAME: String = "Uptime"
 
-@RunWith(AndroidJUnit4::class)
 class WidgetAutomatorTest {
 
     private val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -78,10 +74,6 @@ class WidgetAutomatorTest {
 
     private fun findMyWidget(withName: String): UiObject2? {
         return mDevice.findObject(By.text(withName))
-    }
-
-    fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
     }
 
     @Test

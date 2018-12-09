@@ -27,12 +27,14 @@ class PrefsWidget {
         return PREF_PREFIX_KEY + appWidgetId + key;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void putString(Context context, int appWidgetId, String key, String value) {
         SharedPreferences.Editor prefs = getPreference(context).edit();
         prefs.putString(getKey(appWidgetId, key), value);
         prefs.apply();
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static String getString(Context context, int appWidgetId, String key, String defaultValue) {
         SharedPreferences prefs = getPreference(context);
         String value = prefs.getString(getKey(appWidgetId, key), null);
@@ -43,13 +45,15 @@ class PrefsWidget {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void putBoolean(Context context, int appWidgetId, String key, boolean value) {
         SharedPreferences.Editor prefs = getPreference(context).edit();
         prefs.putBoolean(getKey(appWidgetId, key), value);
         prefs.apply();
     }
 
-    private static boolean getBoolean(Context context, int appWidgetId, String key, @SuppressWarnings("SameParameterValue") boolean defaultValue) {
+    @SuppressWarnings("SameParameterValue")
+    private static boolean getBoolean(Context context, int appWidgetId, String key, boolean defaultValue) {
         SharedPreferences prefs = getPreference(context);
         return prefs.getBoolean(getKey(appWidgetId, key), defaultValue);
     }

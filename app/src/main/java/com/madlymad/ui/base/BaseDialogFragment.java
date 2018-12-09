@@ -1,7 +1,7 @@
 package com.madlymad.ui.base;
 
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 
 public class BaseDialogFragment extends DialogFragment {
 

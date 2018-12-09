@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,6 +38,7 @@ class LogFile {
      * @param logLevel used for added color to logs
      * @param append   <code>true</code> to continue writing existing file
      */
+    @SuppressWarnings("SameParameterValue")
     static void commitToFile(Context context, String filename, String text, int logLevel, boolean append) {
         String timestamp = dateFormat.format(new Date(System.currentTimeMillis()));
         String color = getLogColorString(logLevel);
@@ -71,6 +72,7 @@ class LogFile {
     /**
      * May block UI if not in async
      */
+    @SuppressWarnings("SameParameterValue")
     static String readFromFile(Context context, String filename) {
         StringBuilder stringBuilder = new StringBuilder();
         try {
@@ -145,6 +147,7 @@ class LogFile {
     /**
      * @param logFilename if it is an external path just attached to email
      */
+    @SuppressWarnings("SameParameterValue")
     @SuppressLint("StaticFieldLeak")
     static void asyncDumpLogToSDAttachToMail(final Context context, final String logFilename) {
 

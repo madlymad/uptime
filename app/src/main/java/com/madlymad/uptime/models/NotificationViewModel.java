@@ -1,8 +1,8 @@
 package com.madlymad.uptime.models;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.madlymad.uptime.MainActivityFragment;
 import com.madlymad.uptime.Prefs;

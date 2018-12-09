@@ -2,7 +2,7 @@ package com.madlymad.debug;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.widget.Toast;
 
 import com.madlymad.uptime.Prefs;

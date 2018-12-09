@@ -1,23 +1,22 @@
 package com.madlymad.uptime;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.rule.ActivityTestRule;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
@@ -26,7 +25,6 @@ import static org.hamcrest.Matchers.not;
  *
  * @author mando
  */
-@RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
 
     @Rule
@@ -35,20 +33,20 @@ public class MainActivityInstrumentedTest {
 
     @Before
     public void acceptTerms() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         onView(withText(appContext.getString(R.string.ok))).perform(click());
     }
 
     @Test
     public void checkInitialNoScheduledNotifications() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
         onView(withText(appContext.getString(R.string.schedule)))
                 .check(matches(isDisplayed()));
     }
 
     @Test
     public void createNotificationToFireNow() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = ApplicationProvider.getApplicationContext();
 
         // Check that notification set views are not shown
         notificationViewsNotShown(appContext);
