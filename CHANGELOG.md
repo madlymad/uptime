@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+## [0.15] - 2019-05-12
+### Fixes
+- Resolve crash on Print
+
 ## [0.14] - 2019-05-05
 ### Fixes
 - Remove extra spacing from settings screen
@@ -48,7 +54,8 @@
     - Credits
 - Acceptance screen for crash and analytics data
 
-[Unreleased]: https://github.com/madlymad/uptime/compare/v0.14...HEAD
+[Unreleased]: https://github.com/madlymad/uptime/compare/v0.15...HEAD
+[0.14]: https://github.com/madlymad/uptime/compare/v0.14...v0.15
 [0.14]: https://github.com/madlymad/uptime/compare/v0.13...v0.14
 [0.13]: https://github.com/madlymad/uptime/compare/v0.12...v0.13
 [0.12]: https://github.com/madlymad/uptime/compare/v0.11...v0.12
