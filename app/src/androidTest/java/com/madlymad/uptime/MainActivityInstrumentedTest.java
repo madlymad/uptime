@@ -2,13 +2,13 @@ package com.madlymad.uptime;
 
 import android.content.Context;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.rule.ActivityTestRule;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

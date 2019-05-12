@@ -23,7 +23,7 @@ staticAnalysis {
 
     pmd {
         // https://pmd.github.io/
-        toolVersion '6.2.0'
+        toolVersion '6.13.0'
         exclude project.fileTree('src/test/java')
         exclude project.fileTree('src/androidTest/java')
 
@@ -51,7 +51,6 @@ staticAnalysis {
     // For Kotlin code
 //    detekt {
 //        // https://github.com/arturbosch/detekt
-//        version = "$detekt_version" // When unspecified the latest detekt version
 //        profile('main') {
 //            input = project.file("src/main/java")
 //            config = rootProject.file(ANALYSIS_CONFIG + File.separator + 'detekt-config.yml')

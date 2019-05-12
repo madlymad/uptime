@@ -2,21 +2,22 @@ package com.madlymad.ui.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.preference.MultiSelectListPreference;
-import androidx.preference.SwitchPreference;
-import androidx.preference.CheckBoxPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceGroup;
-import androidx.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
-import com.madlymad.Prefs;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.MultiSelectListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
+
+import com.madlymad.util.PrefsUtils;
 import com.madlymad.ui.listeners.AppPreferenceChangeListener;
 import com.madlymad.ui.listeners.OnActionListener;
 import com.madlymad.ui.listeners.OnChangeListener;
@@ -39,7 +40,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static final AppPreferenceChangeListener sBindPreferenceSummaryToValueListener =
+    private static final AppPreferenceChangeListener PREFERENCE_CHANGE_LISTENER =
             new AppPreferenceChangeListener();
     private String rootKey;
 
@@ -70,10 +71,8 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     public void onStop() {
         super.onStop();
 
-        if (getActivity() != null) {
-            if (!TextUtils.isEmpty(previousTitle)) {
-                getActivity().setTitle(previousTitle);
-            }
+        if (getActivity() != null && !TextUtils.isEmpty(previousTitle)) {
+            getActivity().setTitle(previousTitle);
         }
     }
 
@@ -98,7 +97,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     }
 
     protected String getKey(@StringRes int key) {
-        return Prefs.getKey(Objects.requireNonNull(getContext()), key);
+        return PrefsUtils.getKey(Objects.requireNonNull(getContext()), key);
     }
 
     protected void addPreference(Preference preference) {
@@ -135,7 +134,9 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     public final void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         this.rootKey = rootKey;
         this.onCreatePreferencesScreen(savedInstanceState, rootKey);
-        setTitle((String) getPreference(rootKey).getTitle());
+        if (rootKey != null) {
+            setTitle((String) getPreference(rootKey).getTitle());
+        }
     }
 
     protected String getRootKey() {
@@ -151,7 +152,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
      */
     @SuppressWarnings("SameParameterValue")
     protected boolean is(Preference preference, @StringRes int key) {
-        return getContext() != null && Prefs.getKey(getContext(), key).equals(preference.getKey());
+        return getContext() != null && PrefsUtils.getKey(getContext(), key).equals(preference.getKey());
     }
 
     public void updateSummaries() {
@@ -191,7 +192,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
      * immediately updated upon calling this method. The exact display format is
      * dependent on the type of preference.
      *
-     * @see #sBindPreferenceSummaryToValueListener
+     * @see #PREFERENCE_CHANGE_LISTENER
      */
     private void bindPreferenceSummaryToValue(Preference preference) {
         if (preference == null) {
@@ -211,21 +212,20 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     }
 
     private void bindPreferenceValue(Preference preference, Object newValue) {
+        Object value = newValue;
         if (preference instanceof SwitchPreference) {
-            if (newValue == null) {
-                newValue = Prefs.getBooleanValue(preference.getContext(), preference.getKey(), false);
+            if (value == null) {
+                value = PrefsUtils.getBooleanValue(preference.getContext(), preference.getKey(), false);
             }
-            newValue = (Boolean) newValue ?
-                    preference.getContext().getString(R.string.on) :
-                    preference.getContext().getString(R.string.off);
-        } else if (!(preference instanceof CheckBoxPreference)) {
-            if (newValue == null) {
-                newValue = Prefs.getValue(preference.getContext(), preference.getKey(),
-                        preference instanceof MultiSelectListPreference);
-            }
+            value = (Boolean) value
+                    ? preference.getContext().getString(R.string.on)
+                    : preference.getContext().getString(R.string.off);
+        } else if (!(preference instanceof CheckBoxPreference) && value == null) {
+            value = PrefsUtils.getValue(preference.getContext(), preference.getKey(),
+                    preference instanceof MultiSelectListPreference);
         }
 
         // Trigger the listener immediately with the preference's current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, newValue);
+        PREFERENCE_CHANGE_LISTENER.onPreferenceChange(preference, value);
     }
 }

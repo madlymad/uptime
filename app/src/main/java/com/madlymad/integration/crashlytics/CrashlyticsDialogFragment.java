@@ -2,9 +2,6 @@ package com.madlymad.integration.crashlytics;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +12,10 @@ import com.madlymad.uptime.R;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 public class CrashlyticsDialogFragment extends BaseDialogFragment {
 
     public static final String TAG = "agree_crashlytics";
@@ -22,13 +23,7 @@ public class CrashlyticsDialogFragment extends BaseDialogFragment {
     private AcceptDialogListener acceptDialogListener;
     private CheckBox mCheckBox;
 
-    public CrashlyticsDialogFragment() {
-        // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
-    }
-
-    public static CrashlyticsDialogFragment newInstance(AcceptDialogListener listener) {
+    static CrashlyticsDialogFragment newInstance(AcceptDialogListener listener) {
         CrashlyticsDialogFragment frag = new CrashlyticsDialogFragment();
         frag.acceptDialogListener = listener;
         frag.setCancelable(false);
@@ -68,7 +63,9 @@ public class CrashlyticsDialogFragment extends BaseDialogFragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBoolean(ACCEPTED, mCheckBox.isChecked());
-        getDialog().dismiss();
+        if (getDialog() != null) {
+            getDialog().dismiss();
+        }
         super.onSaveInstanceState(outState);
     }
 

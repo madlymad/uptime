@@ -10,7 +10,7 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.madlymad.debug.LtoF;
-import com.madlymad.uptime.notifications.CreateNotification;
+import com.madlymad.uptime.notifications.CreateNotificationUtils;
 
 import java.util.Set;
 
@@ -83,10 +83,10 @@ public class RestartReminderJob extends Job {
     @Override
     protected Result onRunJob(@NonNull Params params) {
 
-        Notification notification = CreateNotification.getNotification(getContext());
+        Notification notification = CreateNotificationUtils.getNotification(getContext());
 
         NotificationManagerCompat.from(getContext())
-                .notify(CreateNotification.ID, notification);
+                .notify(CreateNotificationUtils.ID, notification);
 
 
         return Result.SUCCESS;

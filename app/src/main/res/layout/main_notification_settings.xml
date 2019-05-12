@@ -11,20 +11,21 @@
         style="@style/Text.Header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="8dp"
         android:text="@string/restart_notification"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/backgroundSchedule"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:background="@color/colorAccent"
         android:padding="8dp"
         app:layout_constrainedHeight="false"
@@ -40,8 +41,8 @@
             style="@style/Text.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/buttonUnset"
@@ -63,10 +64,4 @@
             android:src="@drawable/ic_close" />
     </RelativeLayout>
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupUptime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:foregroundGravity="center"
-        app:constraint_referenced_ids="textViewUptime,chronometerUptime" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,8 +8,8 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.madlymad.debug.LtoF;
-import com.madlymad.uptime.Prefs;
-import com.madlymad.uptime.widget.Update;
+import com.madlymad.uptime.UpPrefsUtils;
+import com.madlymad.uptime.widget.UpdateHelper;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class WidgetUpdateJob extends Job {
     public static final String TAG = "widget_update_job";
     private static final String LOG_TAG = WidgetUpdateJob.class.getSimpleName();
+    private static final int DURATION_FROM = 15;
+    private static final int DURATION_TO = 10;
 
     public static void schedulePeriodic(Context context) {
         if (!JobManager.instance().getAllJobRequestsForTag(TAG).isEmpty()) {
@@ -32,7 +34,7 @@ public class WidgetUpdateJob extends Job {
 
         LtoF.logFile(context, Log.DEBUG, "[" + LOG_TAG + "] schedulePeriodic");
         new JobRequest.Builder(WidgetUpdateJob.TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(10))
+                .setPeriodic(TimeUnit.MINUTES.toMillis(DURATION_FROM), TimeUnit.MINUTES.toMillis(DURATION_TO))
                 .setUpdateCurrent(true)
                 .build()
                 .schedule();
@@ -51,8 +53,8 @@ public class WidgetUpdateJob extends Job {
     protected Result onRunJob(@NonNull Params params) {
 
         LtoF.logFile(getContext(), Log.DEBUG, "[" + LOG_TAG + "] onJobRun");
-        Update.updateAllWidgets(getContext());
-        Prefs.updateNotificationDate(getContext());
+        UpdateHelper.updateAllWidgets(getContext());
+        UpPrefsUtils.updateNotificationDate(getContext());
 
         return Result.SUCCESS;
     }

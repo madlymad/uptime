@@ -2,9 +2,9 @@ package com.madlymad.uptime.models.data;
 
 import android.content.Context;
 
-import com.madlymad.uptime.Prefs;
+import com.madlymad.uptime.UpPrefsUtils;
 import com.madlymad.uptime.models.objects.Times;
-import com.madlymad.uptime.notifications.CreateNotification;
+import com.madlymad.uptime.notifications.CreateNotificationUtils;
 
 public class NotificationLiveData extends PreferenceLiveData<Times> {
 
@@ -15,21 +15,19 @@ public class NotificationLiveData extends PreferenceLiveData<Times> {
     @Override
     protected boolean containsPreferenceKey(String key) {
         switch (key) {
-            case Prefs.NOTIFY_TIMESTAMP:
-            case Prefs.NOTIFY_MILLIS:
+            case UpPrefsUtils.NOTIFY_TIMESTAMP:
+            case UpPrefsUtils.NOTIFY_MILLIS:
                 return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
     public void backgroundDataLoad() {
-        Times data = new Times();
-        data.timestamp = Prefs.getLongValue(context, Prefs.NOTIFY_TIMESTAMP);
-        data.elapsedTime = Prefs.getLongValue(context, Prefs.NOTIFY_MILLIS);
-
-        if (data.timestamp > 0) {
-            CreateNotification.scheduleNotification(context, data.elapsedTime);
+        Times data = new Times(getContext());
+        if (data.getTimestamp() > 0) {
+            CreateNotificationUtils.scheduleNotification(getContext(), data.getElapsedTime());
         }
 
         postValue(data);

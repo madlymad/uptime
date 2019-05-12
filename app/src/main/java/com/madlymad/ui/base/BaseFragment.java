@@ -47,10 +47,8 @@ public class BaseFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        if (getActivity() != null) {
-            if (!TextUtils.isEmpty(previousTitle)) {
-                getActivity().setTitle(previousTitle);
-            }
+        if (getActivity() != null && !TextUtils.isEmpty(previousTitle)) {
+            getActivity().setTitle(previousTitle);
         }
     }
 

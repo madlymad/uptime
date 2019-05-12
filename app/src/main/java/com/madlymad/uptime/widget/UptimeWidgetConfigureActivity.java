@@ -5,16 +5,18 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.appcompat.widget.AppCompatCheckBox;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.madlymad.debug.DebugConf;
+import com.google.android.material.textfield.TextInputEditText;
+import com.madlymad.debug.DebugHelper;
 import com.madlymad.debug.LtoF;
 import com.madlymad.uptime.R;
 import com.madlymad.uptime.receivers.Receivers;
+
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 /**
  * The configuration screen for the {@link UptimeWidget UptimeWidget} AppWidget.
@@ -33,25 +35,26 @@ public class UptimeWidgetConfigureActivity extends Activity {
             final Context context = UptimeWidgetConfigureActivity.this;
 
             // before setValue make sure to cleanup previous widgets
-            PrefsWidget.deletePrefs(context, mAppWidgetId);
+            PrefsWidgetUtils.deletePrefs(context, mAppWidgetId);
 
             // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            PrefsWidget.saveTitle(context, mAppWidgetId, widgetText);
+            Editable text = mAppWidgetText.getText();
+            String widgetText = (text == null) ? "" : text.toString();
+            PrefsWidgetUtils.saveTitle(context, mAppWidgetId, widgetText);
 
             boolean showSeconds = mAppWidgetSmartTime.isChecked();
-            PrefsWidget.saveSmartTime(context, mAppWidgetId, showSeconds);
+            PrefsWidgetUtils.saveSmartTime(context, mAppWidgetId, showSeconds);
 
             // It is the responsibility of the configuration activity to update the app widget
-            Update.updateWidget(context, mAppWidgetId);
+            UpdateHelper.updateWidget(context, mAppWidgetId);
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();
             resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            if (DebugConf.DebugParts.WIDGET) {
+            if (DebugHelper.DebugUtils.WIDGET) {
                 LtoF.logFile(UptimeWidgetConfigureActivity.this, Log.DEBUG,
-                        "[" + LOG_TAG + "] added new widget with [" + mAppWidgetId + "]" +
-                                " title '" + widgetText + "' seconds [" + showSeconds + "]");
+                        "[" + LOG_TAG + "] added new widget with [" + mAppWidgetId + "]"
+                                + " title '" + widgetText + "' seconds [" + showSeconds + "]");
             }
 
             Receivers.checkReceivers(context);
@@ -59,10 +62,6 @@ public class UptimeWidgetConfigureActivity extends Activity {
             finish();
         }
     };
-
-    public UptimeWidgetConfigureActivity() {
-        super();
-    }
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -94,8 +93,8 @@ public class UptimeWidgetConfigureActivity extends Activity {
             return;
         }
 
-        mAppWidgetText.setText(PrefsWidget.loadTitle(UptimeWidgetConfigureActivity.this, mAppWidgetId));
-        mAppWidgetSmartTime.setChecked(PrefsWidget.loadSmartTime(UptimeWidgetConfigureActivity.this, mAppWidgetId));
+        mAppWidgetText.setText(PrefsWidgetUtils.loadTitle(this, mAppWidgetId));
+        mAppWidgetSmartTime.setChecked(PrefsWidgetUtils.loadSmartTime(this, mAppWidgetId));
         updateTextViewDetails();
     }
 
@@ -110,4 +109,3 @@ public class UptimeWidgetConfigureActivity extends Activity {
         }
     }
 }
-

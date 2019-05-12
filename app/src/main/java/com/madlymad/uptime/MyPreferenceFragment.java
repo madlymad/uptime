@@ -6,23 +6,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.Toast;
+
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
-import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.madlymad.Prefs;
+import com.madlymad.uptime.constants.TimeTextUtils;
+import com.madlymad.util.PrefsUtils;
 import com.madlymad.debug.BeDeveloper;
-import com.madlymad.debug.DebugConf;
+import com.madlymad.debug.DebugHelper;
 import com.madlymad.debug.LtoF;
 import com.madlymad.ui.WebViewFragment;
 import com.madlymad.ui.base.BasePreferenceFragment;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MyPreferenceFragment extends BasePreferenceFragment {
     public static final String TAG = "settings";
@@ -30,6 +32,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     private Preference developerOptions;
 
     public MyPreferenceFragment() {
+        super();
         developer = new BeDeveloper(R.string.key_developer);
     }
 
@@ -69,8 +72,8 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
             setupDeveloper();
             setupLicenses();
             setupCredits();
-            setupLinks(R.string.key_privacy, TimeTextUtils.GITLAB_PAGES + "policies/privacy_policy.html");
-            setupLinks(R.string.key_terms, TimeTextUtils.GITLAB_PAGES + "policies/terms_and_conditions.html");
+            setupLinks(R.string.key_privacy, TimeTextUtils.HTML_PRIVACY);
+            setupLinks(R.string.key_terms, TimeTextUtils.HTML_TERMS);
         } else if (getRootKey().equals(getKey(R.string.key_developer_screen))) {
             setupLogEnabled();
             setupLogSendMail();
@@ -101,7 +104,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     private void setupLogEnabled() {
         setOnChangePreference(R.string.key_logs_enable, newValue -> {
             if (newValue instanceof Boolean) {
-                DebugConf.setLogToFile((Boolean) newValue);
+                DebugHelper.setLogToFile((Boolean) newValue);
             }
             return true;
         });
@@ -152,7 +155,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
             developerOptions = preference;
         }
 
-        if (Prefs.getBooleanValue(getActivity(), R.string.key_developer, false)) {
+        if (PrefsUtils.getBooleanValue(getActivity(), R.string.key_developer, false)) {
             addPreference(developerOptions);
         } else {
             removePreference(developerOptions);
@@ -185,7 +188,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
             }
 
             @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+            public void onPermissionDenied(List<String> deniedPermissions) {
                 Toast.makeText(getActivity(), getString(R.string.permission_denied, deniedPermissions.toString()), Toast.LENGTH_SHORT).show();
             }
         };
@@ -197,5 +200,4 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
                     .check();
         }
     }
-
 }

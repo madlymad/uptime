@@ -6,7 +6,10 @@ package com.madlymad.util;
  * @author mando
  */
 
-public class DeviceUtils {
+public final class DeviceUtils {
+
+    private DeviceUtils() {
+    }
 
     /**
      * Returns the manufacturer of the device.

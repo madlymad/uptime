@@ -2,7 +2,6 @@ package com.madlymad.debug;
 
 import android.content.Context;
 import android.net.Uri;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.madlymad.uptime.R;
@@ -10,15 +9,20 @@ import com.madlymad.uptime.R;
 import java.io.File;
 import java.text.DecimalFormat;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created on 19/3/2018.
  *
  * @author mando
  */
 
-public class LtoF {
+public final class LtoF {
 
     private static final String LOGFILE = "log.html";
+
+    private LtoF() {
+    }
 
     /**
      * @param context  the context to use
@@ -37,25 +41,25 @@ public class LtoF {
      * @param message  message that will printed on file
      */
     public static void logFile(Context context, int logLevel, String message) {
-        if (DebugConf.DebugParts.isDebug) {
+        if (DebugHelper.DebugUtils.IS_DEBUG) {
             Log.println(logLevel, "UPTIME", message);
         }
-        if (DebugConf.getLogToFile(context)) {
-            LogFile.commitToFile(context, LOGFILE, message, logLevel, true);
+        if (DebugHelper.getLogToFile(context)) {
+            LogFileUtils.commitToFile(context, LOGFILE, message, logLevel, true);
         }
     }
 
     public static void deleteLogFile(Context context) {
-        LogFile.commitToFile(context, LOGFILE, "File DELETED", Log.ERROR, false);
+        LogFileUtils.commitToFile(context, LOGFILE, "File DELETED", Log.ERROR, false);
     }
 
     @SuppressWarnings("unused")
     public static String getLogFile(Context context) {
-        return LogFile.readFromFile(context, LOGFILE);
+        return LogFileUtils.readFromFile(context, LOGFILE);
     }
 
     public static void mailLogFile(Context context) {
-        LogFile.asyncDumpLogToSDAttachToMail(context, LOGFILE);
+        LogFileUtils.asyncDumpLogToSDAttachToMail(context, LOGFILE);
     }
 
     public static String logFileDetails(Context context) {
@@ -72,19 +76,19 @@ public class LtoF {
 
         DecimalFormat df = new DecimalFormat("0.00");
 
-        float sizeKb = 1024.0f;
+        float sizeKb = LogFileUtils.KB;
         float sizeMo = sizeKb * sizeKb;
         float sizeGo = sizeMo * sizeKb;
         float sizeTerra = sizeGo * sizeKb;
 
 
-        if (size < sizeMo)
+        if (size < sizeMo) {
             return df.format(size / sizeKb) + " KB";
-        else if (size < sizeGo)
+        } else if (size < sizeGo) {
             return df.format(size / sizeMo) + " MB";
-        else if (size < sizeTerra)
+        } else if (size < sizeTerra) {
             return df.format(size / sizeGo) + " GB";
-
+        }
         return "";
     }
 }
