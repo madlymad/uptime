@@ -28,4 +28,7 @@ rm .gitlab-ci.yml
 rm run.sh
 rm -rf .idea
 
+# Remove Play Store listing data
+rm -rf app/src/main/play
+
 cd ${currentDir}

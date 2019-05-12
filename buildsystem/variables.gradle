@@ -2,8 +2,8 @@ apply from: "$rootDir/private/secret.gradle"
 
 ext {
     applicationPackageId = "com.madlymad.uptime"
-    applicationVersionName = "0.14"
-    applicationVersionCode = 15
+    applicationVersionName = "0.15"
+    applicationVersionCode = 16
 
     // Target & Compile SDK version
     appSdkVersion = 28
