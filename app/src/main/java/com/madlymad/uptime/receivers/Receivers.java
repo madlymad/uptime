@@ -5,7 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import com.madlymad.uptime.notifications.CreateNotification;
+import com.madlymad.uptime.notifications.CreateNotificationUtils;
 import com.madlymad.uptime.widget.UptimeWidget;
 
 /**
@@ -13,7 +13,11 @@ import com.madlymad.uptime.widget.UptimeWidget;
  *
  * @author mando
  */
-public class Receivers {
+public final class Receivers {
+
+    private Receivers() {
+    }
+
     private static void changeComponentStateBootReceiver(Context context, boolean enable) {
         changeComponentStateReceiver(context, enable, UpdateBroadcastReceiver.class);
     }
@@ -29,15 +33,14 @@ public class Receivers {
     }
 
     public static void checkReceivers(Context context) {
-        changeComponentStateBootReceiver(context, CreateNotification.isScheduled(context)
+        changeComponentStateBootReceiver(context, CreateNotificationUtils.isScheduled(context)
                 || widgetsActive(context) > 0);
     }
 
     private static int widgetsActive(Context context) {
         AppWidgetManager wm = AppWidgetManager.getInstance(context);
         if (wm != null) {
-            int ids[] = wm.getAppWidgetIds(new ComponentName(context, UptimeWidget.class));
-            return ids.length;
+            return wm.getAppWidgetIds(new ComponentName(context, UptimeWidget.class)).length;
         }
         return 0;
     }

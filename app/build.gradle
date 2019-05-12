@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.google.gms.oss.licenses.plugin'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'io.fabric'
 
 // import gradle scripts
@@ -9,6 +9,12 @@ apply from: rootProject.file('buildsystem' + File.separator + 'methods.gradle')
 apply from: rootProject.file('buildsystem' + File.separator + 'ci-helper.gradle')
 // Add methods for adb standby and doze testing
 apply from: rootProject.file('buildsystem' + File.separator + 'device.gradle')
+apply from: rootProject.file('buildsystem' + File.separator + 'screenshot.gradle')
+// Import Script for Publishing at Play Store
+def playStore = "$rootDir/private/playstore.gradle"
+if (file(playStore).exists()) {
+    apply from: playStore
+}
 
 android {
     compileOptions {
@@ -58,7 +64,9 @@ android {
     // This enables long timeouts required on slow environments, e.g. Travis
     adbOptions {
         timeOutInMs 10 * 60 * 1000  // 10 minutes
-        installOptions "-d", "-t"
+        // -g is for granting permissions when installing the app
+        // -r is to allow reinstalling of the app
+        installOptions "-d", "-t", "-g", "-r"
     }
 }
 
@@ -66,14 +74,14 @@ dependencies {
     //implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // App's dependencies, including test
-    implementation 'androidx.annotation:annotation:1.0.1'
+    implementation 'androidx.annotation:annotation:1.0.2'
 
     // Google support components
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation 'androidx.preference:preference:1.1.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'androidx.preference:preference:1.1.0-alpha04'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
 
     // View Models
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
@@ -81,22 +89,18 @@ dependencies {
     testImplementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
 
     // Firebase and Crashlytics dependencies, also covers the analytics part
-    // https://docs.fabric.io/android/changelog.html#crashlytics
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.7@aar') {
-        transitive = true
-    }
-    implementation('com.google.firebase:firebase-core:16.0.0') {
-        exclude group: 'com.google.guava', module: 'guava-jdk5'
-    }
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    // https://firebase.google.com/docs/crashlytics/get-started#android
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
     // Open Source Notices
-    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.2'
 
     // For permissions
-    implementation 'gun0912.ted:tedpermission:2.1.0'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
 
     // Job Scheduler
-    implementation 'com.evernote:android-job:1.2.5'
+    implementation 'com.evernote:android-job:1.2.6'
 
     testImplementation 'junit:junit:4.12'
 
@@ -105,11 +109,11 @@ dependencies {
 
     // Core library
     // Optional -- Robolectric environment
-    androidTestImplementation 'androidx.test:core:1.0.0'
+    androidTestImplementation 'androidx.test:core:1.1.0'
 
     // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
-    androidTestImplementation 'androidx.test:rules:1.1.1-beta01'
+    androidTestImplementation 'androidx.test:runner:1.2.0-alpha05'
+    androidTestImplementation 'androidx.test:rules:1.2.0-alpha05'
 
     // Assertions
 //    androidTestImplementation 'androidx.test.ext:junit:1.0.0'
@@ -117,7 +121,7 @@ dependencies {
 //    androidTestImplementation 'com.google.truth:truth:0.42'
 
     // Espresso dependencies
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha05'
 //    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1-beta01'
 //    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1-beta01'
 //    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.1.1-beta01'
@@ -132,7 +136,7 @@ dependencies {
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
-    androidTestUtil 'androidx.test:orchestrator:1.1.1-beta01'
+    androidTestUtil 'androidx.test:orchestrator:1.2.0-alpha05'
 
     // For mocking objects
     testImplementation 'org.mockito:mockito-core:2.8.9'

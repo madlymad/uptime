@@ -1,14 +1,14 @@
 package com.madlymad.integration.crashlytics;
 
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
 
 import com.crashlytics.android.Crashlytics;
-import com.madlymad.Prefs;
+import com.madlymad.util.PrefsUtils;
 import com.madlymad.ui.base.BaseActivity;
 import com.madlymad.uptime.BuildConfig;
 import com.madlymad.uptime.R;
 
+import androidx.fragment.app.FragmentManager;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -17,11 +17,14 @@ import io.fabric.sdk.android.Fabric;
  * @author mando
  */
 
-public class MadCrashlytics {
+public final class MadCrashlytics {
     /**
      * "debug" or "release" application
      */
     private static final String BUILD_TYPE = "BUILD_TYPE";
+
+    private MadCrashlytics() {
+    }
 
     /**
      * Ask for permission and initialize the crash reporting
@@ -56,7 +59,7 @@ public class MadCrashlytics {
         if (crashlyticsDialogFragment == null) {
             crashlyticsDialogFragment = CrashlyticsDialogFragment.newInstance(
                     accepted -> {
-                        Prefs.setValue(context, R.string.key_crashlytics_on, accepted);
+                        PrefsUtils.setValue(context, R.string.key_crashlytics_on, accepted);
                         if (accepted) {
                             start(context);
                         }
@@ -66,7 +69,7 @@ public class MadCrashlytics {
     }
 
     private static boolean checkOptInValue(Context context) {
-        return Prefs.getBooleanValue(context, R.string.key_crashlytics_on, false);
+        return PrefsUtils.getBooleanValue(context, R.string.key_crashlytics_on, false);
     }
 
     private static void start(Context context) {

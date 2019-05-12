@@ -17,6 +17,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author mando
  */
+@SuppressWarnings("unused")
 public class MadAnalytics {
 
     private FirebaseAnalytics mFirebaseAnalytics;

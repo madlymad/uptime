@@ -4,8 +4,8 @@
         <Or>
             <Class name="~.*\.R\$.*" />
             <Class name="~.*\.R\$.*" />
-            <Class name="~.*Test" />
-            <Class name="~.*Test\$.*" />
+            <Class name="~.*com.madlymad.uptime.Test" />
+            <Class name="~.*com.madlymad.uptime.Test\$.*" />
             <Class name="~.*\.Manifest\$.*" />
         </Or>
     </Match>

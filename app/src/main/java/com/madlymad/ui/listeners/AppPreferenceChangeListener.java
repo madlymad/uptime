@@ -25,46 +25,59 @@ public class AppPreferenceChangeListener {
             stringBuffer.append(value.toString());
         }
         if (preference instanceof MultiSelectListPreference && value != null) {
-            stringBuffer = new StringBuilder();
-            //noinspection unchecked
-            Set<String> selectedValues = (Set<String>) value;
-            MultiSelectListPreference multiPreference = (MultiSelectListPreference) preference;
-            CharSequence[] entries = multiPreference.getEntries();
-            CharSequence[] values = multiPreference.getEntryValues();
-
-            for (int i = 0; i < values.length; i++) {
-                CharSequence entryValue = values[i];
-                if (selectedValues.contains(entryValue.toString())) {
-                    stringBuffer.append(entries[i]).append(", ");
-                }
-            }
-            if (stringBuffer.length() > 0) {
-                int index = stringBuffer.lastIndexOf(", ");
-                stringBuffer.delete(index, index + 2);
-            }
-            preference.setSummary(stringBuffer.toString());
+            summaryForMultiSelectListPreference(preference, value);
         } else if (preference instanceof ListPreference) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list.
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(stringBuffer.toString());
-
-            // Set the summary to reflect the new value.
-            preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+            summaryForListPreference(preference, stringBuffer);
         } else if (preference instanceof SwitchPreference) {
-            String title = (String) preference.getTitle();
-            if (TextUtils.isEmpty(title)
-                    || title.equals(preference.getContext().getString(R.string.on))
-                    || title.equals(preference.getContext().getString(R.string.off))) {
-                preference.setTitle(stringBuffer.toString());
-                preference.setSummary(null);
-            } else {
-                preference.setSummary(stringBuffer.toString());
-            }
+            summaryForSwitchPreference(preference, stringBuffer);
         } else if (!(preference instanceof CheckBoxPreference)) {
             // For all other preferences, set the summary to the value's
             // simple string representation.
             preference.setSummary(stringBuffer.toString());
         }
+    }
+
+    private void summaryForSwitchPreference(Preference preference, StringBuilder stringBuffer) {
+        String title = (String) preference.getTitle();
+        if (TextUtils.isEmpty(title)
+                || title.equals(preference.getContext().getString(R.string.on))
+                || title.equals(preference.getContext().getString(R.string.off))) {
+            preference.setTitle(stringBuffer.toString());
+            preference.setSummary(null);
+        } else {
+            preference.setSummary(stringBuffer.toString());
+        }
+    }
+
+    private void summaryForListPreference(Preference preference, StringBuilder stringBuffer) {
+        // For list preferences, look up the correct display value in
+        // the preference's 'entries' list.
+        ListPreference listPreference = (ListPreference) preference;
+        int index = listPreference.findIndexOfValue(stringBuffer.toString());
+
+        // Set the summary to reflect the new value.
+        preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+    }
+
+    private void summaryForMultiSelectListPreference(Preference preference, Object value) {
+        StringBuilder stringBuffer;
+        stringBuffer = new StringBuilder();
+        //noinspection unchecked
+        Set<String> selectedValues = (Set<String>) value;
+        MultiSelectListPreference multiPreference = (MultiSelectListPreference) preference;
+        CharSequence[] entries = multiPreference.getEntries();
+        CharSequence[] values = multiPreference.getEntryValues();
+
+        for (int i = 0; i < values.length; i++) {
+            CharSequence entryValue = values[i];
+            if (selectedValues.contains(entryValue.toString())) {
+                stringBuffer.append(entries[i]).append(", ");
+            }
+        }
+        if (stringBuffer.length() > 0) {
+            int index = stringBuffer.lastIndexOf(", ");
+            stringBuffer.delete(index, index + 2);
+        }
+        preference.setSummary(stringBuffer.toString());
     }
 }

@@ -24,9 +24,6 @@ public class WebViewFragment extends BaseFragment {
     private static final String WEB_URL = "url";
     private String url;
 
-    public WebViewFragment() {
-    }
-
     public static String buildAsset(@SuppressWarnings("SameParameterValue") String filename) {
         return "file:///android_asset/" + filename;
     }
@@ -49,7 +46,7 @@ public class WebViewFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        WebView webView = (WebView) view;
+        WebView webView = view.findViewById(R.id.webView);
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override

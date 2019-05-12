@@ -44,11 +44,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scheduleLayout" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupUptime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:foregroundGravity="center"
-        app:constraint_referenced_ids="textViewUptime,chronometerUptime" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

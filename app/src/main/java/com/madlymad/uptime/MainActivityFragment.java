@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
@@ -13,13 +12,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.madlymad.debug.DebugConf;
+import com.madlymad.debug.DebugHelper;
 import com.madlymad.debug.LtoF;
+import com.madlymad.uptime.constants.TimeTextUtils;
 import com.madlymad.uptime.models.NotificationViewModel;
 import com.madlymad.uptime.models.TimePickerViewModel;
-import com.madlymad.uptime.notifications.CreateNotification;
+import com.madlymad.uptime.notifications.CreateNotificationUtils;
 import com.madlymad.uptime.receivers.Receivers;
-import com.madlymad.uptime.widget.Update;
+import com.madlymad.uptime.widget.UpdateHelper;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -45,9 +45,6 @@ public class MainActivityFragment extends Fragment {
     private NotificationViewModel notificationViewModel;
     private TimePickerViewModel timePickerViewModel;
 
-    public MainActivityFragment() {
-    }
-
     static MainActivityFragment newInstance() {
         return new MainActivityFragment();
     }
@@ -67,15 +64,15 @@ public class MainActivityFragment extends Fragment {
 
     private void initializeModels() {
         if (getActivity() != null) {
-            Prefs.updateNotificationDate(getActivity());
+            UpPrefsUtils.updateNotificationDate(getActivity());
             // The ViewModelStore provides a new ViewModel or one previously created.
             notificationViewModel
                     = ViewModelProviders.of(getActivity()).get(NotificationViewModel.class);
             timePickerViewModel = ViewModelProviders.of(getActivity()).get(TimePickerViewModel.class);
 
             notificationViewModel.getData().observe(this, timers -> {
-                if (timers != null && timers.timestamp != 0) {
-                    updateNotifications(timers.elapsedTime);
+                if (timers != null && timers.getTimestamp() != 0) {
+                    updateNotifications(timers.getElapsedTime());
                 }
                 updateUI();
             });
@@ -97,7 +94,7 @@ public class MainActivityFragment extends Fragment {
         apply.setOnClickListener(view12 -> showSchedule());
 
         unset.setOnClickListener(view1 -> {
-            CreateNotification.removeScheduledNotification(getContext());
+            CreateNotificationUtils.removeScheduledNotification(getContext());
             Receivers.checkReceivers(getContext());
 
             updateUI();
@@ -105,25 +102,25 @@ public class MainActivityFragment extends Fragment {
 
         Receivers.checkReceivers(getContext());
         updateUI();
-        Update.updateAllWidgets(getContext());
+        UpdateHelper.updateAllWidgets(getContext());
     }
 
     private void updateUI() {
-        boolean showRestart = false;
         if (notificationViewModel.getData() == null
                 || notificationViewModel.getData().getValue() == null) {
             return;
         }
+        boolean showRestart = false;
 
-        long timestamp = notificationViewModel.getData().getValue().timestamp;
+        long timestamp = notificationViewModel.getData().getValue().getTimestamp();
 
         Date date = new Date(timestamp);
         String myDate = TimeTextUtils.getDateString(date);
-        boolean isScheduled = CreateNotification.isScheduled(getContext());
+        boolean isScheduled = CreateNotificationUtils.isScheduled(getContext());
 
-        if (DebugConf.DebugParts.NOTIFICATION) {
-            LtoF.logFile(getContext(), Log.VERBOSE, "[" + LOG_TAG + "]" +
-                    " Notify timestamp: " + timestamp
+        if (DebugHelper.DebugUtils.NOTIFICATION) {
+            LtoF.logFile(getContext(), Log.VERBOSE, "[" + LOG_TAG + "]"
+                    + " Notify timestamp: " + timestamp
                     + " isScheduled: " + isScheduled);
         }
 
@@ -145,17 +142,17 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Functionality of menu is at activity code
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        // Functionality of menu is at activity code
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onResume() {
@@ -199,7 +196,7 @@ public class MainActivityFragment extends Fragment {
     private void updateNotifications(long duration) {
         Log.d(LOG_TAG, "updateNotifications [" + duration + "]");
 
-        CreateNotification.scheduleNotification(getContext(), duration);
+        CreateNotificationUtils.scheduleNotification(getContext(), duration);
         Receivers.checkReceivers(getContext());
     }
 }

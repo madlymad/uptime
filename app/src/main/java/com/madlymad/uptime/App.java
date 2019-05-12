@@ -3,7 +3,7 @@ package com.madlymad.uptime;
 import android.app.Application;
 
 import com.evernote.android.job.JobManager;
-import com.madlymad.debug.DebugConf;
+import com.madlymad.debug.DebugHelper;
 import com.madlymad.integration.crashlytics.MadCrashlytics;
 import com.madlymad.uptime.jobs.UptimeJobCreator;
 
@@ -18,8 +18,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (DebugConf.DebugParts.isDebug) {
-            DebugConf.setStrictMode();
+        if (DebugHelper.DebugUtils.IS_DEBUG) {
+            DebugHelper.setStrictMode();
         }
 
         MadCrashlytics.initOnPermission(this);

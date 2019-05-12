@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.14] - 2019-05-05
 ### Fixes
 - Remove extra spacing from settings screen
 - Fix theme issue on OSS licenses
@@ -9,6 +9,11 @@
 
 ### Code/Structure changes
 - Migrate to AndroidX
+- Code Quality improvements
+- Proguard optimizations
+
+### Known issues
+- Extra spacing under uptime timer
 
 ## [0.13] - 2018-12-08
 ### Fixes
@@ -43,7 +48,8 @@
     - Credits
 - Acceptance screen for crash and analytics data
 
-[Unreleased]: https://github.com/madlymad/uptime/compare/v0.13...HEAD
+[Unreleased]: https://github.com/madlymad/uptime/compare/v0.14...HEAD
+[0.14]: https://github.com/madlymad/uptime/compare/v0.13...v0.14
 [0.13]: https://github.com/madlymad/uptime/compare/v0.12...v0.13
 [0.12]: https://github.com/madlymad/uptime/compare/v0.11...v0.12
 [0.11]: https://github.com/madlymad/uptime/tree/v0.11

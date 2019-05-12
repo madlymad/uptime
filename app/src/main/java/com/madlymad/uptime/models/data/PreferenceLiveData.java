@@ -6,10 +6,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public abstract class PreferenceLiveData<T> extends LiveData<T> {
-    final Context context;
-    private SharedPreferences.OnSharedPreferenceChangeListener preferencesObserver;
+    private final Context context;
+    private final  SharedPreferences.OnSharedPreferenceChangeListener preferencesObserver;
 
     PreferenceLiveData(Context context) {
+        super();
         this.context = context;
 
         preferencesObserver = (sharedPreferences, key) -> {
@@ -42,4 +43,7 @@ public abstract class PreferenceLiveData<T> extends LiveData<T> {
         new Thread(this::backgroundDataLoad).start();
     }
 
+    public Context getContext() {
+        return context;
+    }
 }

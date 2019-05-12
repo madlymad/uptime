@@ -1,13 +1,15 @@
 package com.madlymad.uptime.models;
 
 import android.app.Application;
+
+import com.madlymad.uptime.UpPrefsUtils;
+
 import androidx.lifecycle.AndroidViewModel;
 
-import com.madlymad.uptime.Prefs;
+import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_MEASURE;
+import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_VALUE;
 
-import static com.madlymad.uptime.constants.Measure.DEFAULT_RESTART_MEASURE;
-import static com.madlymad.uptime.constants.Measure.DEFAULT_RESTART_VALUE;
-
+@SuppressWarnings("PMD.DataClass")
 public class TimePickerViewModel extends AndroidViewModel {
 
     private int measurement;
@@ -15,8 +17,7 @@ public class TimePickerViewModel extends AndroidViewModel {
 
     public TimePickerViewModel(Application application) {
         super(application);
-
-        initData();
+        initData(application);
     }
 
     public int getMeasurement() {
@@ -36,12 +37,16 @@ public class TimePickerViewModel extends AndroidViewModel {
     }
 
     public void storeData() {
-        Prefs.setValue(getApplication(), Prefs.NOTIFY_MEASURE, this.measurement);
-        Prefs.setValue(getApplication(), Prefs.NOTIFY_NUMBER, this.numericValue);
+        UpPrefsUtils.setValue(getApplication(), UpPrefsUtils.NOTIFY_MEASURE, this.measurement);
+        UpPrefsUtils.setValue(getApplication(), UpPrefsUtils.NOTIFY_NUMBER, this.numericValue);
+    }
+
+    private void initData(Application application) {
+        measurement = UpPrefsUtils.getIntValue(application, UpPrefsUtils.NOTIFY_MEASURE, DEFAULT_RESTART_MEASURE);
+        numericValue = UpPrefsUtils.getIntValue(application, UpPrefsUtils.NOTIFY_NUMBER, DEFAULT_RESTART_VALUE);
     }
 
     public void initData() {
-        measurement = Prefs.getIntValue(getApplication(), Prefs.NOTIFY_MEASURE, DEFAULT_RESTART_MEASURE);
-        numericValue = Prefs.getIntValue(getApplication(), Prefs.NOTIFY_NUMBER, DEFAULT_RESTART_VALUE);
+        initData(getApplication());
     }
 }

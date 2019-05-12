@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import com.madlymad.ui.base.BaseDialogFragment;
+import com.madlymad.uptime.constants.MeasureUtils;
 import com.madlymad.uptime.models.TimePickerViewModel;
 
 import java.util.Objects;
@@ -19,23 +20,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 
-import static com.madlymad.uptime.constants.Measure.MAX_DAYS;
-import static com.madlymad.uptime.constants.Measure.MAX_HOURS;
-import static com.madlymad.uptime.constants.Measure.MAX_MONTHS;
-import static com.madlymad.uptime.constants.Measure.MEASURE_IN_DAYS;
-import static com.madlymad.uptime.constants.Measure.MEASURE_IN_HOURS;
-import static com.madlymad.uptime.constants.Measure.MEASURE_IN_MONTHS;
-import static com.madlymad.uptime.constants.Measure.MIN_NUMERIC_TIME;
-
 public class TimePickerDialogFragment extends BaseDialogFragment {
 
     private NumberPicker numberPicker;
     private NumberPicker valuePicker;
     private TimeDialogListener dialogListener;
     private TimePickerViewModel mViewModel;
-
-    public TimePickerDialogFragment() {
-    }
 
     static TimePickerDialogFragment newInstance() {
         return new TimePickerDialogFragment();
@@ -79,16 +69,16 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
                 .setView(view)
                 .setTitle(R.string.picker_dialog_title)
                 .setNegativeButton(R.string.cancel, (dialog, whichButton) -> mViewModel.initData())
-                .setPositiveButton(R.string.apply, ((dialog, which) -> {
+                .setPositiveButton(R.string.apply, (dialog, which) -> {
                     if (dialogListener != null) {
                         dialogListener.onDateSetDialog(mViewModel.getNumericValue(), mViewModel.getMeasurement());
                     }
-                }));
+                });
         return dialogBuilder.create();
     }
 
     @Override
-    public void onCancel(DialogInterface dialog) {
+    public void onCancel(@NonNull DialogInterface dialog) {
         mViewModel.initData();
         super.onCancel(dialog);
     }
@@ -100,15 +90,14 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     }
 
     private void initNumberValues() {
-        numberPicker.setMinValue(MIN_NUMERIC_TIME);
-        numberPicker.setMaxValue(MAX_DAYS);
+        updateNumericValue(MeasureUtils.MEASURE_IN_DAYS);
 
         numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> mViewModel.setNumericValue(newVal));
     }
 
     private void initMeasurementValues() {
-        valuePicker.setMinValue(MEASURE_IN_HOURS);
-        valuePicker.setMaxValue(MEASURE_IN_MONTHS);
+        valuePicker.setMinValue(MeasureUtils.MEASURE_IN_HOURS);
+        valuePicker.setMaxValue(MeasureUtils.MEASURE_IN_MONTHS);
         valuePicker.setDisplayedValues(getResources().getStringArray(R.array.time_measurements));
         valuePicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
 
@@ -118,20 +107,9 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     }
 
     private void updateNumericValue(int measurementValue) {
-        switch (measurementValue) {
-            case MEASURE_IN_HOURS: // hours
-                numberPicker.setMinValue(MIN_NUMERIC_TIME);
-                numberPicker.setMaxValue(MAX_HOURS);
-                break;
-            case MEASURE_IN_DAYS: // days
-                numberPicker.setMinValue(MIN_NUMERIC_TIME);
-                numberPicker.setMaxValue(MAX_DAYS);
-                break;
-            case MEASURE_IN_MONTHS: // months
-                numberPicker.setMinValue(MIN_NUMERIC_TIME);
-                numberPicker.setMaxValue(MAX_MONTHS);
-                break;
-        }
+        int[] values = MeasureUtils.measurementValues(measurementValue);
+        numberPicker.setMinValue(values[MeasureUtils.POS_MIN]);
+        numberPicker.setMaxValue(values[MeasureUtils.POS_MAX]);
     }
 
     @Override

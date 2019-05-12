@@ -40,9 +40,11 @@ public class MainActivity extends BaseActivity implements
             case R.id.action_about:
                 displayPreferences();
                 return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     private void displayPreferences() {

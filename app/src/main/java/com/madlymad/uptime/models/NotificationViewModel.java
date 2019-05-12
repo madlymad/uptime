@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.madlymad.uptime.MainActivityFragment;
-import com.madlymad.uptime.Prefs;
+import com.madlymad.uptime.UpPrefsUtils;
 import com.madlymad.uptime.models.data.NotificationLiveData;
 import com.madlymad.uptime.models.objects.Times;
 
@@ -28,8 +28,8 @@ public class NotificationViewModel extends AndroidViewModel {
 
     public void setData(long elapsedTime) {
         if (elapsedTime != 0) {
-            Prefs.setValue(getApplication(), Prefs.NOTIFY_MILLIS, elapsedTime);
-            Prefs.setTimestampFromMilliseconds(getApplication(), elapsedTime);
+            UpPrefsUtils.setValue(getApplication(), UpPrefsUtils.NOTIFY_MILLIS, elapsedTime);
+            UpPrefsUtils.setTimestampFromMilliseconds(getApplication(), elapsedTime);
         }
     }
 }
