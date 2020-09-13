@@ -1,4 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: "$rootDir/buildsystem/variables.gradle"
 
 buildscript {
     apply from: "$rootDir/buildsystem/variables.gradle"
@@ -7,32 +8,29 @@ buildscript {
         google()
         jcenter()
         maven {
-            url 'https://maven.fabric.io/public'
-        }
-        maven {
             // URL for detekt-gradle-plugin
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
 
         // Novoda plugins for static analysis tools
-        classpath 'com.novoda:gradle-static-analysis-plugin:0.8.1'
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0-RC14"
+        classpath 'com.novoda:gradle-static-analysis-plugin:1.2'
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.12.0"
 
         // Crashlytics via Firebase
         // google-services plugin
-        classpath 'com.google.gms:google-services:4.2.0'
-        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.28.1'
+        classpath 'com.google.gms:google-services:4.3.3'
+        // Add the Crashlytics Gradle plugin.
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.1'
 
         // Including Open Source Notices
         // https://developers.google.com/android/guides/opensource
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.9.4'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.2'
 
         // For publishing application to store
-        classpath 'com.github.triplet.gradle:play-publisher:2.2.0'
+        classpath 'com.github.triplet.gradle:play-publisher:2.8.0'
 
         // Kotlin plugins
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

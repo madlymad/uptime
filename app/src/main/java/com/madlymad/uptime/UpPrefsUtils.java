@@ -3,10 +3,14 @@ package com.madlymad.uptime;
 import android.content.Context;
 
 import com.madlymad.uptime.constants.TimeTextUtils;
-import com.madlymad.util.PrefsUtils;
+import com.madlymad.uptime.models.objects.TimePickerValue;
 import com.madlymad.uptime.notifications.CreateNotificationUtils;
+import com.madlymad.util.PrefsUtils;
 
 import java.util.Date;
+
+import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_MEASURE;
+import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_VALUE;
 
 /**
  * Created on 18/3/2018.
@@ -54,5 +58,19 @@ public class UpPrefsUtils extends PrefsUtils {
             }
             CreateNotificationUtils.scheduleNotification(context, elapsed);
         }
+    }
+
+    public static TimePickerValue getTimePickerValue(Context context) {
+        TimePickerValue value = new TimePickerValue();
+        value.setMeasurement(UpPrefsUtils.getIntValue(context, UpPrefsUtils.NOTIFY_MEASURE, DEFAULT_RESTART_MEASURE));
+        value.setNumericValue(UpPrefsUtils.getIntValue(context, UpPrefsUtils.NOTIFY_NUMBER, DEFAULT_RESTART_VALUE));
+        return value;
+    }
+
+    public static void setTimePickerValue(Context context, TimePickerValue value) {
+        UpPrefsUtils.getEditor(context)
+                .putInt(UpPrefsUtils.NOTIFY_MEASURE, value.getMeasurement())
+                .putInt(UpPrefsUtils.NOTIFY_NUMBER, value.getNumericValue())
+                .apply();
     }
 }

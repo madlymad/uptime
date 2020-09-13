@@ -91,6 +91,30 @@ public final class TimeTextUtils {
         return builder.toString().trim();
     }
 
+    public static String getUptimePrettyStringShort() {
+        long[] times = calculateTimes(SystemClock.elapsedRealtime());
+        long days = times[POS_D];
+        long hours = times[POS_H];
+        long minutes = times[POS_MIN];
+        long seconds = times[POS_SEC];
+
+        StringBuilder builder = new StringBuilder();
+        if (days > 0) {
+            builder.append(days).append("d");
+        }
+        if (hours > 0) {
+            builder.append(' ').append(hours).append("h");
+        }
+        if (minutes > 0) {
+            builder.append(' ').append(minutes).append("min");
+        }
+        if (seconds > 0) {
+            builder.append(' ').append(seconds).append("sec");
+        }
+
+        return builder.toString().trim();
+    }
+
     static long[] calculateTimes(long millis) {
         long[] times = new long[TIMES];
         times[POS_D] = TimeUnit.MILLISECONDS.toDays(millis);

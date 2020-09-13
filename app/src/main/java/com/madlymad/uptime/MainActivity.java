@@ -3,15 +3,16 @@ package com.madlymad.uptime;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.madlymad.integration.crashlytics.MadCrashlytics;
-import com.madlymad.ui.WebViewFragment;
-import com.madlymad.ui.base.BaseActivity;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
+
+import com.madlymad.integration.crashlytics.MadCrashlytics;
+import com.madlymad.ui.WebViewFragment;
+import com.madlymad.ui.base.BaseActivity;
+import com.madlymad.uptime.models.objects.TimePickerValue;
 
 public class MainActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartScreenCallback,
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity implements
 
     }
 
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -77,10 +79,10 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onDateSetDialog(int numericValue, int measurementValue) {
+    public void onDateSetDialog(TimePickerValue value) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(MainActivityFragment.TAG);
         if (fragment instanceof MainActivityFragment) {
-            ((MainActivityFragment) fragment).onDateSetDialog(numericValue, measurementValue);
+            ((MainActivityFragment) fragment).onDateSetDialog(value);
         }
     }
 }

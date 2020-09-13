@@ -1,5 +1,20 @@
+//apply from: "$rootDir/build.gradle"
+
 def reportsDirectory = "$buildDir/reports/androidTests/connected"
 def screenshotDirectory = '/sdcard/Pictures/uptime'
+
+def adbDir = {
+    def rootDir = project.rootDir
+    def localProperties = new File(rootDir, "local.properties")
+    if (localProperties.exists()) {
+        Properties properties = new Properties()
+        localProperties.withInputStream {
+            instr -> properties.load(instr)
+        }
+        def sdkDir = properties.getProperty('sdk.dir')
+        return "$sdkDir/platform-tools/adb"
+    }
+}
 
 def embedScreenshotsTask = task('embedScreenshots', group: 'reporting') {
     doFirst {
@@ -37,7 +52,7 @@ def embedScreenshotsTask = task('embedScreenshots', group: 'reporting') {
 }
 
 def clearScreenshotsTask = task('clearScreenshots', type: Exec) {
-    executable "${android.getAdbExe().toString()}"
+    executable "${adbDir}"
     args 'shell', 'rm', '-r', screenshotDirectory
     finalizedBy {
         embedScreenshotsTask
@@ -45,12 +60,12 @@ def clearScreenshotsTask = task('clearScreenshots', type: Exec) {
 }
 
 def createScreenshotDirectoryTask = task('createScreenshotDirectory', type: Exec, group: 'reporting') {
-    executable "${android.getAdbExe().toString()}"
+    executable "${adbDir}"
     args 'shell', 'mkdir', '-p', screenshotDirectory
 }
 
 def fetchScreenshotsTask = task('fetchScreenshots', type: Exec, group: 'reporting') {
-    executable "${android.getAdbExe().toString()}"
+    executable "${adbDir}"
     args 'pull', screenshotDirectory + "/.", reportsDirectory
     finalizedBy {
         clearScreenshotsTask

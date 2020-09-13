@@ -2,14 +2,13 @@ package com.madlymad.integration.crashlytics;
 
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
-import com.madlymad.util.PrefsUtils;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.madlymad.ui.base.BaseActivity;
 import com.madlymad.uptime.BuildConfig;
 import com.madlymad.uptime.R;
-
-import androidx.fragment.app.FragmentManager;
-import io.fabric.sdk.android.Fabric;
+import com.madlymad.util.PrefsUtils;
 
 /**
  * Created on 22/3/2018.
@@ -45,10 +44,8 @@ public final class MadCrashlytics {
      */
     public static void initOnPermission(Context context) {
         boolean userOptInFlag = checkOptInValue(context);
-        if (userOptInFlag) {
-            // Only initialize Fabric is user opt-in is true
-            start(context);
-        }
+        // Only report when the user opt-in is true
+        start(userOptInFlag);
     }
 
     private static void askPermission(final BaseActivity context) {
@@ -60,9 +57,7 @@ public final class MadCrashlytics {
             crashlyticsDialogFragment = CrashlyticsDialogFragment.newInstance(
                     accepted -> {
                         PrefsUtils.setValue(context, R.string.key_crashlytics_on, accepted);
-                        if (accepted) {
-                            start(context);
-                        }
+                        start(accepted);
                     });
             crashlyticsDialogFragment.show(fm, CrashlyticsDialogFragment.TAG);
         }
@@ -72,12 +67,14 @@ public final class MadCrashlytics {
         return PrefsUtils.getBooleanValue(context, R.string.key_crashlytics_on, false);
     }
 
-    private static void start(Context context) {
-        Fabric.with(context, new Crashlytics());
-        initKeys();
+    private static void start(boolean accepted) {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(accepted);
+        if (accepted) {
+            initKeys();
+        }
     }
 
     private static void initKeys() {
-        Crashlytics.setString(MadCrashlytics.BUILD_TYPE, BuildConfig.BUILD_TYPE);
+        FirebaseCrashlytics.getInstance().setCustomKey(MadCrashlytics.BUILD_TYPE, BuildConfig.BUILD_TYPE);
     }
 }

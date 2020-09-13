@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [0.16] - 2020-09-13
+### Features
+- User friendly uptime in app
+
+### Fixes
+- Resolve crash related to log file sharing
+- Resolve crash related to widget notifications update
+
+### Code/Structure changes
+- Build with SDK 29
+- Switch Crashlytics dependencies to Firebase
+- Remove Fabric
+- Depend on AndroidX solution for permissions, resolved known crashes
+- Migrate from Evernote android-job to AndroidX WorkManager API
+- Use latest stable libraries and not alpha versions where possible
+
+### Other changes
+- Update Privacy Policy, Terms and Conditions
+
 ## [0.15] - 2019-05-12
 ### Fixes
 - Resolve crash on Print
@@ -54,8 +73,9 @@
     - Credits
 - Acceptance screen for crash and analytics data
 
-[Unreleased]: https://github.com/madlymad/uptime/compare/v0.15...HEAD
-[0.14]: https://github.com/madlymad/uptime/compare/v0.14...v0.15
+[Unreleased]: https://github.com/madlymad/uptime/compare/v0.16...HEAD
+[0.16]: https://github.com/madlymad/uptime/compare/v0.15...v0.16
+[0.15]: https://github.com/madlymad/uptime/compare/v0.14...v0.15
 [0.14]: https://github.com/madlymad/uptime/compare/v0.13...v0.14
 [0.13]: https://github.com/madlymad/uptime/compare/v0.12...v0.13
 [0.12]: https://github.com/madlymad/uptime/compare/v0.11...v0.12

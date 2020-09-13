@@ -65,12 +65,6 @@
     public static <fields>;
 }
 
--keep class com.crashlytics.** { *; }
--dontwarn com.crashlytics.**
-
--keep class io.fabric.sdk.android.** { *; }
--dontwarn io.fabric.sdk.android.**
-
 -keep public class * extends java.lang.Exception
 
 # Play Services

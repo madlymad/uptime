@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -17,13 +18,11 @@ import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 
-import com.madlymad.util.PrefsUtils;
 import com.madlymad.ui.listeners.AppPreferenceChangeListener;
 import com.madlymad.ui.listeners.OnActionListener;
 import com.madlymad.ui.listeners.OnChangeListener;
 import com.madlymad.uptime.R;
-
-import java.util.Objects;
+import com.madlymad.util.PrefsUtils;
 
 
 /**
@@ -77,8 +76,8 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // Hide keypad when a Preference Fragment is created
         if (getActivity() != null) {
             final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -97,7 +96,7 @@ public abstract class BasePreferenceFragment extends PreferenceFragmentCompat
     }
 
     protected String getKey(@StringRes int key) {
-        return PrefsUtils.getKey(Objects.requireNonNull(getContext()), key);
+        return PrefsUtils.getKey(requireContext(), key);
     }
 
     protected void addPreference(Preference preference) {

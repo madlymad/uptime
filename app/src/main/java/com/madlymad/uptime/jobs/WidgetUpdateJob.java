@@ -1,17 +1,20 @@
 package com.madlymad.uptime.jobs;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
+import androidx.annotation.NonNull;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.Operation;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
 import com.madlymad.debug.LtoF;
 import com.madlymad.uptime.UpPrefsUtils;
 import com.madlymad.uptime.widget.UpdateHelper;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,43 +22,45 @@ import java.util.concurrent.TimeUnit;
  *
  * @author mando
  */
-public class WidgetUpdateJob extends Job {
+public class WidgetUpdateJob extends Worker {
     public static final String TAG = "widget_update_job";
     private static final String LOG_TAG = WidgetUpdateJob.class.getSimpleName();
     private static final int DURATION_FROM = 15;
     private static final int DURATION_TO = 10;
 
-    public static void schedulePeriodic(Context context) {
-        if (!JobManager.instance().getAllJobRequestsForTag(TAG).isEmpty()) {
-            // job already scheduled, nothing to do
-            LtoF.logFile(context, Log.VERBOSE, "[" + LOG_TAG + "] already scheduled");
-            return;
-        }
+    public WidgetUpdateJob(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
 
+    public static void schedulePeriodic(Context context) {
         LtoF.logFile(context, Log.DEBUG, "[" + LOG_TAG + "] schedulePeriodic");
-        new JobRequest.Builder(WidgetUpdateJob.TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(DURATION_FROM), TimeUnit.MINUTES.toMillis(DURATION_TO))
-                .setUpdateCurrent(true)
-                .build()
-                .schedule();
+        WorkManager.getInstance().enqueueUniquePeriodicWork(TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
+                WidgetUpdateJob.buildRequest());
+    }
+
+    @NonNull
+    private static PeriodicWorkRequest buildRequest() {
+        return new PeriodicWorkRequest.Builder(
+                WidgetUpdateJob.class,
+                DURATION_FROM, TimeUnit.MINUTES,
+                DURATION_TO, TimeUnit.MINUTES)
+                .addTag(TAG)
+                .build();
     }
 
     public static void cancelJobs(Context context) {
-        Set<JobRequest> jobs = JobManager.instance().getAllJobRequestsForTag(TAG);
-        LtoF.logFile(context, Log.DEBUG, "[" + LOG_TAG + "] cancelJobs " + jobs.size());
-        for (JobRequest job : jobs) {
-            JobManager.instance().cancel(job.getJobId());
-        }
+        Operation.State operation = WorkManager.getInstance().cancelAllWorkByTag(TAG)
+                .getState().getValue();
+        LtoF.logFile(context, Log.DEBUG, "[" + LOG_TAG + "] cancelJobs " + operation);
     }
 
-    @Override
     @NonNull
-    protected Result onRunJob(@NonNull Params params) {
-
-        LtoF.logFile(getContext(), Log.DEBUG, "[" + LOG_TAG + "] onJobRun");
-        UpdateHelper.updateAllWidgets(getContext());
-        UpPrefsUtils.updateNotificationDate(getContext());
-
-        return Result.SUCCESS;
+    @Override
+    public Result doWork() {
+        LtoF.logFile(getApplicationContext(), Log.DEBUG, "[" + LOG_TAG + "] onJobRun");
+        UpdateHelper.updateAllWidgets(getApplicationContext());
+        UpPrefsUtils.updateNotificationDate(getApplicationContext());
+        return Result.success();
     }
 }

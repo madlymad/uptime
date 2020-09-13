@@ -7,14 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
-import com.madlymad.ui.base.BaseDialogFragment;
-import com.madlymad.uptime.R;
-
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
+import com.madlymad.ui.base.BaseDialogFragment;
+import com.madlymad.uptime.R;
 
 public class CrashlyticsDialogFragment extends BaseDialogFragment {
 
@@ -38,14 +36,14 @@ public class CrashlyticsDialogFragment extends BaseDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = onCreateDialogView(Objects.requireNonNull(getActivity()).getLayoutInflater(), null);
+        View view = onCreateDialogView(requireActivity().getLayoutInflater(), null);
 
         mCheckBox = view.findViewById(R.id.checkbox_agree);
         if (savedInstanceState != null) {
             mCheckBox.setChecked(savedInstanceState.getBoolean(ACCEPTED));
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(requireActivity())
                 .setCancelable(false)
                 .setView(view)
                 //.setTitle(R.string.title)

@@ -55,7 +55,7 @@ public final class MeasureUtils {
 
     @Retention(SOURCE)
     @IntDef({MEASURE_IN_HOURS, MEASURE_IN_DAYS, MEASURE_IN_MONTHS})
-    @interface TimeMeasurement {
+    public @interface TimeMeasurement {
     }
 
 }

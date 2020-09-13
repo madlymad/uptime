@@ -2,51 +2,54 @@ package com.madlymad.uptime.models;
 
 import android.app.Application;
 
-import com.madlymad.uptime.UpPrefsUtils;
-
 import androidx.lifecycle.AndroidViewModel;
 
-import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_MEASURE;
-import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_VALUE;
+import com.madlymad.uptime.UpPrefsUtils;
+import com.madlymad.uptime.models.objects.TimePickerValue;
 
 @SuppressWarnings("PMD.DataClass")
 public class TimePickerViewModel extends AndroidViewModel {
 
-    private int measurement;
-    private int numericValue;
+    private TimePickerValue value = new TimePickerValue();
 
     public TimePickerViewModel(Application application) {
         super(application);
         initData(application);
     }
 
+    public TimePickerValue getValue() {
+        return value;
+    }
+
+    public void setValue(TimePickerValue timePickerValue) {
+        value = timePickerValue;
+    }
+
     public int getMeasurement() {
-        return measurement;
+        return value.getMeasurement();
     }
 
     public void setMeasurement(int measurement) {
-        this.measurement = measurement;
+        value.setMeasurement(measurement);
     }
 
     public int getNumericValue() {
-        return numericValue;
+        return value.getNumericValue();
     }
 
     public void setNumericValue(int numericValue) {
-        this.numericValue = numericValue;
+        value.setNumericValue(numericValue);
     }
 
     public void storeData() {
-        UpPrefsUtils.setValue(getApplication(), UpPrefsUtils.NOTIFY_MEASURE, this.measurement);
-        UpPrefsUtils.setValue(getApplication(), UpPrefsUtils.NOTIFY_NUMBER, this.numericValue);
-    }
-
-    private void initData(Application application) {
-        measurement = UpPrefsUtils.getIntValue(application, UpPrefsUtils.NOTIFY_MEASURE, DEFAULT_RESTART_MEASURE);
-        numericValue = UpPrefsUtils.getIntValue(application, UpPrefsUtils.NOTIFY_NUMBER, DEFAULT_RESTART_VALUE);
+        UpPrefsUtils.setTimePickerValue(getApplication(), value);
     }
 
     public void initData() {
         initData(getApplication());
+    }
+
+    private void initData(Application application) {
+        value = UpPrefsUtils.getTimePickerValue(application);
     }
 }
