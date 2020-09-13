@@ -9,12 +9,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 
+import androidx.core.app.NotificationCompat;
+
 import com.madlymad.uptime.MainActivity;
 import com.madlymad.uptime.R;
 import com.madlymad.uptime.UpPrefsUtils;
 import com.madlymad.uptime.jobs.RestartReminderJob;
-
-import androidx.core.app.NotificationCompat;
+import com.madlymad.uptime.models.objects.Times;
 
 /**
  * Created on 22/4/2018.
@@ -30,16 +31,17 @@ public final class CreateNotificationUtils {
     }
 
     public static void removeScheduledNotification(Context context) {
-        UpPrefsUtils.remove(context, UpPrefsUtils.NOTIFY_MILLIS);
-        UpPrefsUtils.remove(context, UpPrefsUtils.NOTIFY_TIMESTAMP);
-        UpPrefsUtils.remove(context, UpPrefsUtils.NOTIFY_MEASURE);
-        UpPrefsUtils.remove(context, UpPrefsUtils.NOTIFY_NUMBER);
+        UpPrefsUtils.remove(context,
+                UpPrefsUtils.NOTIFY_MILLIS,
+                UpPrefsUtils.NOTIFY_TIMESTAMP,
+                UpPrefsUtils.NOTIFY_MEASURE,
+                UpPrefsUtils.NOTIFY_NUMBER);
 
         removeNotification(context);
         RestartReminderJob.cancelJob(context);
     }
 
-    private static void removeNotification(Context context) {
+    public static void removeNotification(Context context) {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
@@ -84,7 +86,7 @@ public final class CreateNotificationUtils {
     }
 
     public static boolean isScheduled(Context context) {
-        return RestartReminderJob.isScheduled(context);
+        return Times.scheduled(context);
     }
 
     public static void scheduleNotification(Context context, long elapsedTime) {

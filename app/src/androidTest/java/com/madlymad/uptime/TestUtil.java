@@ -14,6 +14,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -21,7 +22,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 class TestUtil {
     public static final String TEST_PACKAGE = BuildConfig.APPLICATION_ID;
-    static final int LAUNCH_TIMEOUT = 5000;
+    public static final long DEFAULT_TIMEOUT = 5000;
+    static final int LAUNCH_TIMEOUT = (int) DEFAULT_TIMEOUT;
     public static final String ANDROID_WIDGET_BUTTON = "android.widget.Button";
     static final String ANDROID_WIDGET_EDIT_TEXT = "android.widget.EditText";
     static final String ANDROID_WIDGET_TEXT_VIEW = "android.widget.TextView";
@@ -35,9 +37,11 @@ class TestUtil {
     }
 
     static UiObject findObjectWithText(UiDevice mDevice, String text, String className) {
-        return mDevice.findObject(new UiSelector()
+        UiObject element = mDevice.findObject(new UiSelector()
                 .text(text)
                 .className(className));
+        element.waitForExists(DEFAULT_TIMEOUT);
+        return element;
     }
 
     static void clickItemWithDescription(UiDevice mDevice, String text) throws UiObjectNotFoundException {
@@ -50,6 +54,14 @@ class TestUtil {
     private static UiObject findObjectWithDescription(UiDevice mDevice, String text) {
         return mDevice.findObject(new UiSelector()
                 .descriptionContains(text));
+    }
+
+    //This method returns child from scrollable parent using text
+    public UiObject findChildFromScrollParentByText(String scrollParentClass, String childItemClass, String childDesc) throws UiObjectNotFoundException {
+        UiScrollable parent = new UiScrollable(new UiSelector()
+                .className(scrollParentClass));
+        return parent.getChildByText(new UiSelector()
+                .className(childItemClass), childDesc, true);
     }
 
     public static void selectNumberPickerValue(int pickerId, int targetValue, ActivityTestRule activityTestRule) {

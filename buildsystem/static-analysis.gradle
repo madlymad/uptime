@@ -34,13 +34,6 @@ staticAnalysis {
         includeVariants { variant -> excludeTestAndRelease(variant) }
     }
 
-    findbugs {
-        // http://findbugs.sourceforge.net/
-        toolVersion '3.0.1'
-        excludeFilter rootProject.file(ANALYSIS_CONFIG + File.separator + 'findbugs-excludes.xml')
-        includeVariants { variant -> excludeTestAndRelease(variant) }
-    }
-
     lintOptions {
         // https://developer.android.com/studio/write/lint.html
         lintConfig rootProject.file(ANALYSIS_CONFIG + File.separator + 'lint-config.xml')

@@ -9,27 +9,47 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
-import com.madlymad.uptime.constants.TimeTextUtils;
-import com.madlymad.util.PrefsUtils;
 import com.madlymad.debug.BeDeveloper;
 import com.madlymad.debug.DebugHelper;
 import com.madlymad.debug.LtoF;
 import com.madlymad.ui.WebViewFragment;
 import com.madlymad.ui.base.BasePreferenceFragment;
-
-import java.util.List;
+import com.madlymad.uptime.constants.TimeTextUtils;
+import com.madlymad.util.PrefsUtils;
 
 public class MyPreferenceFragment extends BasePreferenceFragment {
     public static final String TAG = "settings";
     private final BeDeveloper developer;
     private Preference developerOptions;
+
+    /**
+     * Register the permissions callback, which handles the user's response to the
+     * system permissions dialog. Save the return value, an instance of
+     * ActivityResultLauncher, as an instance variable.
+     */
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your
+                    // app.
+                    Toast.makeText(getActivity(), R.string.permission_granted, Toast.LENGTH_SHORT).show();
+                    LtoF.mailLogFile(getActivity());
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // features requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                    Toast.makeText(getActivity(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+                }
+            });
 
     public MyPreferenceFragment() {
         super();
@@ -180,24 +200,6 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     }
 
     private void mailLogs() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getActivity(), R.string.permission_granted, Toast.LENGTH_SHORT).show();
-                LtoF.mailLogFile(getActivity());
-            }
-
-            @Override
-            public void onPermissionDenied(List<String> deniedPermissions) {
-                Toast.makeText(getActivity(), getString(R.string.permission_denied, deniedPermissions.toString()), Toast.LENGTH_SHORT).show();
-            }
-        };
-        if (getContext() != null) {
-            TedPermission.with(getContext())
-                    .setPermissionListener(permissionlistener)
-                    .setDeniedMessage(R.string.deny_permission_message)
-                    .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .check();
-        }
+        requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 }

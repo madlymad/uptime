@@ -4,17 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.util.Set;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+
+import java.util.Set;
 
 /**
  * Parent class with shared methods for all PrefsUtils extensions.
  * <p>
  * Created by mando on 25/12/2016.
  */
-@SuppressWarnings({"WeakerAccess", "unused", "PMD.UseUtilityClass"})
+@SuppressWarnings({"WeakerAccess", "PMD.UseUtilityClass", "unused", "RedundantSuppression"})
 public class PrefsUtils {
 
     protected PrefsUtils() {
@@ -67,24 +67,28 @@ public class PrefsUtils {
         return sharedPreferences.getBoolean(key, defaultValue);
     }
 
-    public static void setValue(Context context, String key, long value) {
+    protected static SharedPreferences.Editor getEditor(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
+        return preferences.edit();
+    }
+
+    public static void setValue(Context context, String key, long value) {
+        SharedPreferences.Editor editor = getEditor(context);
         editor.putLong(key, value);
         editor.apply();
     }
 
     public static void setValue(Context context, String key, int value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = getEditor(context);
         editor.putInt(key, value);
         editor.apply();
     }
 
-    public static void remove(Context context, String key) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(key);
+    public static void remove(Context context, String... keys) {
+        SharedPreferences.Editor editor = getEditor(context);
+        for (String key : keys) {
+            editor.remove(key);
+        }
         editor.apply();
     }
 

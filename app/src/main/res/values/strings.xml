@@ -59,7 +59,7 @@
     <string name="provide_crash_data">Provide crash data</string>
     <string name="provide_crash_data_summary">Send crash data to improve application functionality</string>
     <string name="permission_granted">Permission Granted</string>
-    <string name="permission_denied">Permission Denied\n %s</string>
+    <string name="permission_denied">Permission Denied.\nSharing file is not possible.</string>
     <string name="deny_permission_message">If you reject permission, you can not use this service\n\nPlease turn on permissions at [Setting] &gt; [Permission]</string>
     <string name="notification_picker_text">When device is running for …</string>
     <string name="picker_dialog_title">Schedule Restart Notification</string>

@@ -9,16 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
-import com.madlymad.ui.base.BaseDialogFragment;
-import com.madlymad.uptime.constants.MeasureUtils;
-import com.madlymad.uptime.models.TimePickerViewModel;
-
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.madlymad.ui.base.BaseDialogFragment;
+import com.madlymad.uptime.constants.MeasureUtils;
+import com.madlymad.uptime.models.TimePickerViewModel;
+import com.madlymad.uptime.models.objects.TimePickerValue;
 
 public class TimePickerDialogFragment extends BaseDialogFragment {
 
@@ -47,14 +46,14 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
 
     private void initializeModels() {
         if (getActivity() != null) {
-            mViewModel = ViewModelProviders.of(getActivity()).get(TimePickerViewModel.class);
+            mViewModel = new ViewModelProvider(getActivity()).get(TimePickerViewModel.class);
         }
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = onCreateDialogView(Objects.requireNonNull(getActivity()).getLayoutInflater(), null);
+        View view = onCreateDialogView(requireActivity().getLayoutInflater(), null);
         initializeModels();
 
         numberPicker = view.findViewById(R.id.pickNumber);
@@ -64,14 +63,14 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
         initMeasurementValues();
         initDefaultValues();
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(requireActivity())
                 .setCancelable(false)
                 .setView(view)
                 .setTitle(R.string.picker_dialog_title)
                 .setNegativeButton(R.string.cancel, (dialog, whichButton) -> mViewModel.initData())
                 .setPositiveButton(R.string.apply, (dialog, which) -> {
                     if (dialogListener != null) {
-                        dialogListener.onDateSetDialog(mViewModel.getNumericValue(), mViewModel.getMeasurement());
+                        dialogListener.onDateSetDialog(mViewModel.getValue());
                     }
                 });
         return dialogBuilder.create();
@@ -119,8 +118,7 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     }
 
     private void saveSelectionToModel() {
-        mViewModel.setMeasurement(valuePicker.getValue());
-        mViewModel.setNumericValue(numberPicker.getValue());
+        mViewModel.setValue(new TimePickerValue(valuePicker.getValue(), numberPicker.getValue()));
     }
 
     public interface TimeDialogContainer {
@@ -128,6 +126,6 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     }
 
     public interface TimeDialogListener {
-        void onDateSetDialog(int numericValue, int measurementValue);
+        void onDateSetDialog(TimePickerValue value);
     }
 }

@@ -7,7 +7,9 @@ import android.os.SystemClock
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.*
+import com.madlymad.uptime.TestUtil.DEFAULT_TIMEOUT
 import org.hamcrest.CoreMatchers.notNullValue
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +19,6 @@ import org.junit.Test
  * @author mando
  */
 
-const val TIMEOUT: Long = 5000
 // WIDGET_SELECTION_AT_X: USE here true or depending
 //  if you have to scroll at the X or Y axis when
 //  navigating through widget selection screen.
@@ -28,7 +29,11 @@ const val APP_NAME: String = "Uptime"
 class WidgetAutomatorTest {
 
     private val mDevice = UiDevice.getInstance(getInstrumentation())
+    private val statusBarSize = 84
 
+    /**
+     * Works on simulator API 28
+     */
     @Before
     fun setWidgetOnHome() {
         mDevice.pressHome()
@@ -40,11 +45,19 @@ class WidgetAutomatorTest {
         assertThat(launcherPackage, notNullValue())
         mDevice.wait(
                 Until.hasObject(By.pkg(launcherPackage).depth(0)),
-                TIMEOUT
+                DEFAULT_TIMEOUT
         )
+        val x = 21
+        val y = statusBarSize
+        mDevice.swipe(x, y, x, y, 400)
 
         val screenSize = Point(mDevice.displayWidth, mDevice.displayHeight)
         val screenCenter = Point(screenSize.x / 2, screenSize.y / 2)
+
+        val widgetsView = mDevice.findObject(UiSelector()
+                .text("Widgets")
+                .className(TestUtil.ANDROID_WIDGET_TEXT_VIEW))
+        widgetsView.click()
 
         var dimen = screenSize.y / 2
         if (WIDGET_SELECTION_AT_X) {
@@ -64,19 +77,27 @@ class WidgetAutomatorTest {
         }
         widget.longClick()
 
-        val widgetsView = mDevice.findObject(UiSelector()
-                .text("Widgets")
-                .className(TestUtil.ANDROID_WIDGET_TEXT_VIEW))
-        widgetsView.click()
-
-        val widgetItem = mDevice.findObject(
-                UiSelector().className("com.android.launcher3.widget.WidgetCell"))
+        val widgetItem = mDevice.findObject(UiSelector()
+                .className("com.android.launcher3.widget.WidgetCell"))
+                .getChild(UiSelector().className("android.widget.LinearLayout")
+                        .childSelector(UiSelector().className("android.widget.TextView")
+                                .text(APP_NAME)))
 
         widgetItem.dragTo(screenCenter.x, screenCenter.y, 40)
 
-        mDevice.waitForWindowUpdate(BuildConfig.APPLICATION_ID, TIMEOUT)
+        mDevice.waitForWindowUpdate(BuildConfig.APPLICATION_ID, DEFAULT_TIMEOUT)
     }
 
+    @After
+    fun removeWidget() {
+        val widgetItem = mDevice.findObject(By.text(APP_NAME))
+        widgetItem.click(DEFAULT_TIMEOUT)
+        val removeItem = mDevice.findObject(By.text("Remove"))
+        widgetItem.drag(removeItem.visibleCenter)
+    }
+
+
+    @Suppress("SameParameterValue")
     private fun findMyWidget(withName: String): UiObject2? {
         return mDevice.findObject(By.text(withName))
     }

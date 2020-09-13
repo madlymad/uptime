@@ -18,3 +18,4 @@ release/
 /app/src/main/res/raw/third_party_licenses
 /fastlane/README.md
 /fastlane/report.xml
+.settings

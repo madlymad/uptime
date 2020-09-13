@@ -12,23 +12,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.work.WorkManager;
+
 import com.madlymad.debug.DebugHelper;
 import com.madlymad.debug.LtoF;
 import com.madlymad.uptime.constants.TimeTextUtils;
+import com.madlymad.uptime.jobs.RestartReminderJob;
 import com.madlymad.uptime.models.NotificationViewModel;
 import com.madlymad.uptime.models.TimePickerViewModel;
+import com.madlymad.uptime.models.objects.TimePickerValue;
 import com.madlymad.uptime.notifications.CreateNotificationUtils;
 import com.madlymad.uptime.receivers.Receivers;
 import com.madlymad.uptime.widget.UpdateHelper;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProviders;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -39,6 +42,7 @@ public class MainActivityFragment extends Fragment {
     private static final String LOG_TAG = "Main";
     private Chronometer chronometer;
     private ImageButton unset;
+    private TextView uptimeView;
     private TextView errorView;
     private TextView apply;
 
@@ -67,23 +71,39 @@ public class MainActivityFragment extends Fragment {
             UpPrefsUtils.updateNotificationDate(getActivity());
             // The ViewModelStore provides a new ViewModel or one previously created.
             notificationViewModel
-                    = ViewModelProviders.of(getActivity()).get(NotificationViewModel.class);
-            timePickerViewModel = ViewModelProviders.of(getActivity()).get(TimePickerViewModel.class);
+                    = new ViewModelProvider(getActivity()).get(NotificationViewModel.class);
+            timePickerViewModel = new ViewModelProvider(getActivity()).get(TimePickerViewModel.class);
 
-            notificationViewModel.getData().observe(this, timers -> {
+            notificationViewModel.getData().observe(getViewLifecycleOwner(), timers -> {
+                Log.d(LOG_TAG, "observe notifications " + timers);
                 if (timers != null && timers.getTimestamp() != 0) {
                     updateNotifications(timers.getElapsedTime());
+                } else {
+                    clearNotifications();
                 }
                 updateUI();
             });
+
+            WorkManager.getInstance().getWorkInfosByTagLiveData(RestartReminderJob.TAG)
+                    .observe(getViewLifecycleOwner(), workInfos -> {
+                        Log.d(LOG_TAG, "observe workers " + workInfos);
+                        updateUI();
+                    });
         }
+    }
+
+    private void clearNotifications() {
+        CreateNotificationUtils.removeScheduledNotification(getContext());
+        Receivers.checkReceivers(getContext());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        uptimeView = view.findViewById(R.id.textViewUptime);
         chronometer = view.findViewById(R.id.chronometerUptime);
+        chronometer.setOnChronometerTickListener(chronometerChanged -> updateTime());
         chronometer.setBase(0);
         chronometer.start();
 
@@ -94,15 +114,17 @@ public class MainActivityFragment extends Fragment {
         apply.setOnClickListener(view12 -> showSchedule());
 
         unset.setOnClickListener(view1 -> {
-            CreateNotificationUtils.removeScheduledNotification(getContext());
-            Receivers.checkReceivers(getContext());
-
+            clearNotifications();
             updateUI();
         });
 
         Receivers.checkReceivers(getContext());
         updateUI();
         UpdateHelper.updateAllWidgets(getContext());
+    }
+
+    private void updateTime() {
+        uptimeView.setText(TimeTextUtils.getUptimePrettyStringShort());
     }
 
     private void updateUI() {
@@ -172,14 +194,14 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void showSchedule() {
-        FragmentManager fm = getFragmentManager();
-        if (fm != null) {
-            TimePickerDialogFragment dialogFragment = TimePickerDialogFragment.newInstance();
-            dialogFragment.show(fm, "fragment_edit_name");
-        }
+        FragmentManager fm = getParentFragmentManager();
+        TimePickerDialogFragment dialogFragment = TimePickerDialogFragment.newInstance();
+        dialogFragment.show(fm, "fragment_edit_name");
     }
 
-    void onDateSetDialog(int numericValue, int measurementValue) {
+    public void onDateSetDialog(TimePickerValue timePickerValue) {
+        int numericValue = timePickerValue.getNumericValue();
+        int measurementValue = timePickerValue.getMeasurement();
         Log.d(LOG_TAG, "number [" + numericValue + "] measurement [" + measurementValue + "]");
 
         long duration = TimeTextUtils.convertToMillis(measurementValue, numericValue);
