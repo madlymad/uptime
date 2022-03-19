@@ -9,6 +9,9 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.collection.SparseArrayCompat;
+import androidx.core.content.FileProvider;
+
 import com.madlymad.uptime.BuildConfig;
 import com.madlymad.util.DeviceUtils;
 
@@ -24,9 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import androidx.collection.SparseArrayCompat;
-import androidx.core.content.FileProvider;
 
 // Requires API Level 26
 // https://pmd.github.io/pmd-6.13.0/pmd_rules_java_performance.html#avoidfilestream
@@ -125,7 +125,7 @@ final class LogFileUtils {
     /**
      * @param logFilename if it is an external path just attached to email
      */
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "deprecation", "PMD.CognitiveComplexity"})
     @SuppressLint("StaticFieldLeak")
     static void asyncDumpLogToSDAttachToMail(final Context context, final String logFilename) {
 

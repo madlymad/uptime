@@ -12,4 +12,5 @@
     <string name="key_logs_email">key_logs_email</string>
     <string name="key_logs_show">key_logs_show</string>
     <string name="key_crashlytics_on">key_crashlytics_on</string>
+    <string name="key_crashlytics_qa">key_crashlytics_qa</string>
 </resources>

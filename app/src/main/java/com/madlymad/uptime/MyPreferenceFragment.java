@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
@@ -34,7 +35,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
      * system permissions dialog. Save the return value, an instance of
      * ActivityResultLauncher, as an instance variable.
      */
-    private ActivityResultLauncher<String> requestPermissionLauncher =
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
                     // Permission is granted. Continue the action or workflow in your
@@ -103,7 +104,7 @@ public class MyPreferenceFragment extends BasePreferenceFragment {
     }
 
     @Override
-    public boolean onPreferenceTreeClick(Preference preference) {
+    public boolean onPreferenceTreeClick(@NonNull Preference preference) {
         if (is(preference, R.string.key_version)) {
             developer.onPreferenceTreeClick(getActivity());
             if (isAdded()) {

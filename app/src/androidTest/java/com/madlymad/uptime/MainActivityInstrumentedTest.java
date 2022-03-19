@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,13 +28,13 @@ import static org.hamcrest.Matchers.not;
 public class MainActivityInstrumentedTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public ActivityScenarioRule<MainActivity> mActivityRule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
     public void acceptTerms() {
         Context appContext = ApplicationProvider.getApplicationContext();
-        onView(withText(appContext.getString(R.string.ok))).perform(click());
+        onView(withText(appContext.getString(R.string.agree))).perform(click());
     }
 
     @Test

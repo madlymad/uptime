@@ -16,6 +16,7 @@ import com.madlymad.uptime.R;
 import com.madlymad.uptime.UpPrefsUtils;
 import com.madlymad.uptime.jobs.RestartReminderJob;
 import com.madlymad.uptime.models.objects.Times;
+import com.madlymad.util.Util;
 
 /**
  * Created on 22/4/2018.
@@ -51,7 +52,7 @@ public final class CreateNotificationUtils {
 
     private static PendingIntent getPendingIntent(Context context) {
         Intent notificationIntent = new Intent(context, MainActivity.class);
-        return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(context, 0, notificationIntent, Util.mutableFlags(PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     public static Notification getNotification(Context context) {

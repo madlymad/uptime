@@ -76,15 +76,15 @@ public class MainActivityFragment extends Fragment {
 
             notificationViewModel.getData().observe(getViewLifecycleOwner(), timers -> {
                 Log.d(LOG_TAG, "observe notifications " + timers);
-                if (timers != null && timers.getTimestamp() != 0) {
-                    updateNotifications(timers.getElapsedTime());
-                } else {
+                if (timers == null || timers.getTimestamp() == 0) {
                     clearNotifications();
+                } else {
+                    updateNotifications(timers.getElapsedTime());
                 }
                 updateUI();
             });
 
-            WorkManager.getInstance().getWorkInfosByTagLiveData(RestartReminderJob.TAG)
+            WorkManager.getInstance(requireContext()).getWorkInfosByTagLiveData(RestartReminderJob.TAG)
                     .observe(getViewLifecycleOwner(), workInfos -> {
                         Log.d(LOG_TAG, "observe workers " + workInfos);
                         updateUI();
@@ -169,12 +169,6 @@ public class MainActivityFragment extends Fragment {
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        // Functionality of menu is at activity code
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public void onResume() {

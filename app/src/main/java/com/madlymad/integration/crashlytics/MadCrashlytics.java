@@ -32,7 +32,8 @@ public final class MadCrashlytics {
      */
     public static void initAskPermission(BaseActivity context) {
         boolean userOptInFlag = checkOptInValue(context);
-        if (!userOptInFlag) {
+        boolean userAlreadyAnswered = checkAnsweredValue(context, userOptInFlag);
+        if (!userOptInFlag && !userAlreadyAnswered) {
             askPermission(context);
         }
     }
@@ -57,6 +58,7 @@ public final class MadCrashlytics {
             crashlyticsDialogFragment = CrashlyticsDialogFragment.newInstance(
                     accepted -> {
                         PrefsUtils.setValue(context, R.string.key_crashlytics_on, accepted);
+                        PrefsUtils.setValue(context, R.string.key_crashlytics_qa, true);
                         start(accepted);
                     });
             crashlyticsDialogFragment.show(fm, CrashlyticsDialogFragment.TAG);
@@ -65,6 +67,10 @@ public final class MadCrashlytics {
 
     private static boolean checkOptInValue(Context context) {
         return PrefsUtils.getBooleanValue(context, R.string.key_crashlytics_on, false);
+    }
+
+    private static boolean checkAnsweredValue(Context context, boolean defaultValue) {
+        return PrefsUtils.getBooleanValue(context, R.string.key_crashlytics_qa, defaultValue);
     }
 
     private static void start(boolean accepted) {

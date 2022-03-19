@@ -5,6 +5,7 @@ import com.madlymad.uptime.constants.MeasureUtils;
 import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_MEASURE;
 import static com.madlymad.uptime.constants.MeasureUtils.DEFAULT_RESTART_VALUE;
 
+@SuppressWarnings("PMD.DataClass")
 public class TimePickerValue {
     @MeasureUtils.TimeMeasurement
     private int measurement;

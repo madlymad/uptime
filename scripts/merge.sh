@@ -29,7 +29,7 @@ git fetch
 git pull
 
 # Merge the origin/master into the github_master
-git merge --squash --strategy-option theirs master -m "Merge to github" && echo "Squash complete"
+git merge  --allow-unrelated-histories --squash --strategy-option theirs master -m "Merge to github" && echo "Squash complete"
 
 sleep 2
 git reset --soft ${upBranch} && echo "Soft reset to latest upstream"

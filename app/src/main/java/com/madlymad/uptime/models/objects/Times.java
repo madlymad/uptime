@@ -17,7 +17,7 @@ public class Times {
     }
 
     public static boolean scheduled(Context context) {
-        return (new Times(context)).nonZero();
+        return new Times(context).nonZero();
     }
 
     private boolean nonZero() {
@@ -35,9 +35,6 @@ public class Times {
     @NonNull
     @Override
     public String toString() {
-        return "Times{" +
-                "timestamp=" + timestamp +
-                ", elapsedTime=" + elapsedTime +
-                '}';
+        return "Times{timestamp=" + timestamp + ", elapsedTime=" + elapsedTime + '}';
     }
 }

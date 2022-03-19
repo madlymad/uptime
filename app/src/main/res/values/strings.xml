@@ -53,9 +53,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enable_logging">Enable logging</string>
-    <string name="agree">I Agree</string>
-    <string name="crashlytics_opt_in">We Collect Data such as crash reports and analytics to make the app better for you.</string>
-    <string name="ok">OK</string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
+    <string name="crashlytics_opt_in">Do you agree to allow the collection of anonymous crash and analytics data?</string>
     <string name="provide_crash_data">Provide crash data</string>
     <string name="provide_crash_data_summary">Send crash data to improve application functionality</string>
     <string name="permission_granted">Permission Granted</string>

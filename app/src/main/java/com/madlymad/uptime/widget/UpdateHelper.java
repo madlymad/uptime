@@ -15,6 +15,7 @@ import com.madlymad.uptime.MainActivity;
 import com.madlymad.uptime.R;
 import com.madlymad.uptime.constants.TimeTextUtils;
 import com.madlymad.uptime.jobs.WidgetUpdateJob;
+import com.madlymad.util.Util;
 
 import java.util.Arrays;
 
@@ -69,12 +70,12 @@ public final class UpdateHelper {
         Intent intent = new Intent(context, UptimeWidget.class);
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        return PendingIntent.getBroadcast(context, appWidgetId, intent, 0);
+        return PendingIntent.getBroadcast(context, appWidgetId, intent, Util.mutableFlags(0));
     }
 
     private static PendingIntent getPendingMainIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
-        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(context, 0, intent, Util.mutableFlags(PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     private static void startupUpdating(Context context) {

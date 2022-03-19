@@ -39,6 +39,7 @@ public abstract class PreferenceLiveData<T> extends LiveData<T> {
                 .unregisterOnSharedPreferenceChangeListener(preferencesObserver);
     }
 
+    @SuppressWarnings("PMD.DoNotUseThreads")
     private void loadData() {
         new Thread(this::backgroundDataLoad).start();
     }

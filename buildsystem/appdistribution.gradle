@@ -1,0 +1,21 @@
+// Apply the App Distribution Gradle plugin
+apply plugin: 'com.google.firebase.appdistribution'
+
+void firebaseDistributionSetup() {
+    firebaseAppDistribution {
+        serviceCredentialsFile = rootProject.file('private' + File.separator + 'appdistribution' + File.separator + 'uptime-e4fea-5ed07619ed88.json').absolutePath
+        artifactType = "APK" // TODO switch to AAB
+        def filePath = rootProject.file('private' + File.separator + 'appdistribution' + File.separator + 'release-notes.txt')
+        if (filePath.exists()) {
+            releaseNotesFile = filePath.absolutePath
+        }
+        filePath = rootProject.file('private' + File.separator + 'appdistribution' + File.separator + 'tester-groups.txt')
+        if (filePath.exists()) {
+            groupsFile = filePath.absolutePath
+        }
+    }
+}
+
+ext {
+    firebaseDistributionSetup = this.&firebaseDistributionSetup
+}

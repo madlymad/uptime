@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.madlymad.uptime.R;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -22,7 +23,7 @@ public class AppPreferenceChangeListener {
     public void onPreferenceChange(Preference preference, Object value) {
         StringBuilder stringBuffer = new StringBuilder();
         if (value != null) {
-            stringBuffer.append(value.toString());
+            stringBuffer.append(value);
         }
         if (preference instanceof MultiSelectListPreference && value != null) {
             summaryForMultiSelectListPreference(preference, value);
@@ -40,8 +41,8 @@ public class AppPreferenceChangeListener {
     private void summaryForSwitchPreference(Preference preference, StringBuilder stringBuffer) {
         String title = (String) preference.getTitle();
         if (TextUtils.isEmpty(title)
-                || title.equals(preference.getContext().getString(R.string.on))
-                || title.equals(preference.getContext().getString(R.string.off))) {
+                || Objects.equals(title, preference.getContext().getString(R.string.on))
+                || Objects.equals(title, preference.getContext().getString(R.string.off))) {
             preference.setTitle(stringBuffer.toString());
             preference.setSummary(null);
         } else {
