@@ -63,7 +63,7 @@ public class NotificationAutomatorTest {
     @Test
     public void testNotificationFullFlow() throws UiObjectNotFoundException {
         // Simulate a user-click on the OK button, if found.
-        TestUtil.clickItemWithText(mDevice, "OK", TestUtil.ANDROID_WIDGET_BUTTON);
+        TestUtil.clickItemWithText(mDevice, "AGREE", TestUtil.ANDROID_WIDGET_BUTTON);
 
         // Simulate a user-click on Schedule, if found.
         TestUtil.clickItemWithText(mDevice, "Schedule", TestUtil.ANDROID_WIDGET_TEXT_VIEW);

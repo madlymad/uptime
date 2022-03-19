@@ -1,4 +1,4 @@
-apply plugin: 'com.novoda.static-analysis'
+apply plugin: 'com.gradleup.static-analysis'
 apply plugin: 'io.gitlab.arturbosch.detekt'
 
 def ANALYSIS_CONFIG = rootDir.absolutePath + File.separator + "buildsystem" + File.separator + "static-analysis-config"
@@ -23,7 +23,7 @@ staticAnalysis {
 
     pmd {
         // https://pmd.github.io/
-        toolVersion '6.13.0'
+        toolVersion '6.42.0'
         exclude project.fileTree('src/test/java')
         exclude project.fileTree('src/androidTest/java')
 

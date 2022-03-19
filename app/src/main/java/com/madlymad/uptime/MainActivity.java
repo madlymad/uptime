@@ -1,8 +1,10 @@
 package com.madlymad.uptime;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,6 +36,7 @@ public class MainActivity extends BaseActivity implements
 
     }
 
+    @SuppressLint("NonConstantResourceId")
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -60,7 +63,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public boolean onPreferenceStartScreen(PreferenceFragmentCompat preferenceFragmentCompat,
+    public boolean onPreferenceStartScreen(@NonNull PreferenceFragmentCompat preferenceFragmentCompat,
                                            PreferenceScreen preferenceScreen) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         MyPreferenceFragment fragment = new MyPreferenceFragment();

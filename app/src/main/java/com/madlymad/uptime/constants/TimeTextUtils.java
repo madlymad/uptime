@@ -100,10 +100,10 @@ public final class TimeTextUtils {
 
         StringBuilder builder = new StringBuilder();
         if (days > 0) {
-            builder.append(days).append("d");
+            builder.append(days).append('d');
         }
         if (hours > 0) {
-            builder.append(' ').append(hours).append("h");
+            builder.append(' ').append(hours).append('h');
         }
         if (minutes > 0) {
             builder.append(' ').append(minutes).append("min");

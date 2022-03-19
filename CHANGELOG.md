@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [0.17] - 2022-03-19
+### Fixes
+- Resolve issue on constantly asking for analytics and crashlytics concept
+
+### Code/Structure changes
+- Build with SDK 31
+- Stop using JCenter
+- Add firebase distribution
+- Use latest stable libraries and not alpha versions where possible
+
+### Other changes
+- Update Privacy Policy, Terms and Conditions
+
 ## [0.16] - 2020-09-13
 ### Features
 - User friendly uptime in app
@@ -73,11 +86,12 @@
     - Credits
 - Acceptance screen for crash and analytics data
 
-[Unreleased]: https://github.com/madlymad/uptime/compare/v0.16...HEAD
-[0.16]: https://github.com/madlymad/uptime/compare/v0.15...v0.16
-[0.15]: https://github.com/madlymad/uptime/compare/v0.14...v0.15
-[0.14]: https://github.com/madlymad/uptime/compare/v0.13...v0.14
-[0.13]: https://github.com/madlymad/uptime/compare/v0.12...v0.13
-[0.12]: https://github.com/madlymad/uptime/compare/v0.11...v0.12
-[0.11]: https://github.com/madlymad/uptime/tree/v0.11
+[Unreleased]: ../../compare/v0.17...master
+[0.17]: ../../compare/v0.16...v0.17
+[0.16]: ../../compare/v0.15...v0.16
+[0.15]: ../../compare/v0.14...v0.15
+[0.14]: ../../compare/v0.13...v0.14
+[0.13]: ../../compare/v0.12...v0.13
+[0.12]: ../../compare/v0.11...v0.12
+[0.11]: ../../tree/v0.11
 

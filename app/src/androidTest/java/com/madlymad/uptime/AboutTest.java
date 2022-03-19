@@ -1,12 +1,15 @@
 package com.madlymad.uptime;
 
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -20,10 +23,6 @@ import com.madlymad.debug.BeDeveloper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
-
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class AboutTest {
     private static final String PRIVACY_POLICY_HTML = "https://madlymad.gitlab.io/uptime/policies/privacy_policy.html";
@@ -32,12 +31,8 @@ public class AboutTest {
     private UiDevice mDevice;
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, true, false);
-
-    @Rule
-    public RuleChain ruleChain =
-            RuleChain.outerRule(mActivityRule).around(new ScreenshotTakingRule());
+    public ActivityScenarioRule<MainActivity> mActivityRule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
     public void startMainActivityFromHomeScreen() {
@@ -66,7 +61,7 @@ public class AboutTest {
 
     @Test
     public void aboutTest() throws UiObjectNotFoundException {
-        TestUtil.clickItemWithText(mDevice, "OK", TestUtil.ANDROID_WIDGET_BUTTON);
+        TestUtil.clickItemWithText(mDevice, "AGREE", TestUtil.ANDROID_WIDGET_BUTTON);
 
         // Click button More
         TestUtil.clickItemWithDescription(mDevice, "More options");
@@ -77,7 +72,8 @@ public class AboutTest {
         UiObject crashData = TestUtil.findObjectWithText(mDevice, "Provide crash data", TestUtil.ANDROID_WIDGET_TEXT_VIEW);
         assert crashData.exists() && crashData.isEnabled();
 
-        UiObject checkbox = crashData.getFromParent(new UiSelector().className(TestUtil.ANDROID_WIDGET_CHECKBOX));
+        // crashData.getFromParent(new UiSelector().className(TestUtil.ANDROID_WIDGET_CHECKBOX));
+        UiObject checkbox = mDevice.findObject(new UiSelector().checkable(true));
         assert checkbox.exists() && checkbox.isEnabled() && checkbox.isChecked();
 
         // Click Open Source Licenses

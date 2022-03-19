@@ -6,28 +6,33 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             // URL for detekt-gradle-plugin
             url "https://plugins.gradle.org/m2/"
         }
+        gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath "com.android.tools.build:gradle:7.1.2"
 
-        // Novoda plugins for static analysis tools
-        classpath 'com.novoda:gradle-static-analysis-plugin:1.2'
+        // Plugins for static analysis tools
+        // https://github.com/GradleUp/static-analysis-plugin/
+        classpath "com.gradleup:static-analysis-plugin:1.4"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.12.0"
 
         // Crashlytics via Firebase
         // google-services plugin
-        classpath 'com.google.gms:google-services:4.3.3'
+        classpath "com.google.gms:google-services:4.3.10"
         // Add the Crashlytics Gradle plugin.
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.1'
+        classpath "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
 
         // Including Open Source Notices
         // https://developers.google.com/android/guides/opensource
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.2'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
+
+        // Add the App Distribution Gradle plugin
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.1'
 
         // For publishing application to store
         classpath 'com.github.triplet.gradle:play-publisher:2.8.0'
@@ -42,7 +47,7 @@ apply from: "$rootDir/buildsystem/tasks.gradle"
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             url "https://maven.google.com" // Google's Maven repository
         }

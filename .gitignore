@@ -19,3 +19,6 @@ release/
 /fastlane/README.md
 /fastlane/report.xml
 .settings
+/.idea/deploymentTargetDropDown.xml
+/private/appdistribution/release-notes.txt
+/private/appdistribution/tester-groups.txt
