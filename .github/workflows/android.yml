@@ -18,9 +18,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '11'
-        cache: gradle
 
-    - name: Build debug and preprod apks and run tests
-      uses: gradle/gradle-build-action@v2
+    - name: "Build Android project"
+      uses: vgaidarji/android-github-actions-build@v1.0.1
       with:
-        arguments: --stacktrace -Dtrace :app:testDebugUnitTest :app:assembleDebug
+        args: "./gradlew assembleDebug"
+        
+#     - name: "Run UI Tests"
+#       uses: vgaidarji/android-github-actions-emulator@v1.0.1
